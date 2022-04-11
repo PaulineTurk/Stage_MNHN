@@ -107,6 +107,10 @@ def sumLine(cond_proba, list_AA, aa_k, aa_c):
         sum_line += cond_proba[aa_k][aa_p][aa_c]
     return sum_line
 
+
+
+    
+
 def predictorIdentityNeighbor():
     predictor_name = "Identity Predictor Neighbor"
     list_AA = ch.characterList()

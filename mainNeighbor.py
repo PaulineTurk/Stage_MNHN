@@ -88,15 +88,15 @@ def conditionalProba(list_AA, triplet_count, pseudo_count = 0):
                 else:
                     cond_proba[aa_k][aa_p][aa_c] = 0
 
-    for aa_k in list_AA:
-        for aa_c in list_AA:
-            sum_line =sumLine(cond_proba, list_AA, aa_k, aa_c)
-            if sum_line == 0:
-                for aa_p in list_AA:
-                    estimation_proba = 0
-                    for aa_c in list_AA:
-                        estimation_proba += cond_proba[aa_k][aa_p][aa_c]
-                cond_proba[aa_k][aa_p][aa_c] = estimation_proba
+    #for aa_k in list_AA:                   # the problem could only happen with very small databases (not the case here)
+    #    for aa_c in list_AA:
+    #        sum_line =sumLine(cond_proba, list_AA, aa_k, aa_c)
+    #        if sum_line == 0:
+    #            for aa_p in list_AA:
+    #                estimation_proba = 0
+    #                for aa_c in list_AA:
+    #                    estimation_proba += cond_proba[aa_k][aa_p][aa_c]
+    #            cond_proba[aa_k][aa_p][aa_c] = estimation_proba
 
     return cond_proba                 
 
