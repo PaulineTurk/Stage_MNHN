@@ -13,7 +13,7 @@ def addFileFromFolder(file_name, folder_name_source, folder_path_target, extensi
     shutil.copy2(path_file_source, path_file_target)
 
 
-def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_folder_data_train, name_folder_data_test, fraction_test):
+def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_folder_data_train, name_folder_data_test, percentage_train):
     t = Timer()
     t.start()
     path_folder_data_train_test = name_folder_data_train_test + '/'
@@ -40,7 +40,16 @@ def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_fo
         file_name = str(file_path).split("/")[-1]
         data_name.append(file_name)
 
-    x_train ,x_test = train_test_split(data_name, test_size = fraction_test)  
+    fraction_train = percentage_train/100
+    x_train ,x_test = train_test_split(data_name, train_size = fraction_train)  
+    # train_sizefloat or int, default=None
+    # If float, should be between 0.0 and 1.0 and represent the proportion of the dataset to include in the train split. 
+    # If int, represents the absolute number of train samples. 
+    # If None, the value is automatically set to the complement of the test size.
+
+    # Rq.
+    # shufflebool, default=True
+    # Whether or not to shuffle the data before splitting. If shuffle=False then stratify must be None.
 
     for file_name in x_train:
         addFileFromFolder(file_name, name_folder_fasta_total, path_folder_data_train, ".train")
@@ -60,20 +69,36 @@ def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_fo
 
 if __name__ == '__main__': 
 
+    # not trimmed version
+
     path_folder_data = "/Users/pauline/Desktop/data/"    # dossier à créer ou l'on veut mettre toutes les data entrées/sorties
-    fraction_test = 0.9995    # 9 seeds train
-    #fraction_test = 0.995    # 91 seeds train
-    #fraction_test = 0.95    # 910 seeds train
-    #fraction_test = 0.5     # 9101 seeds train
-    name_folder_data_train_test = "PfamSplit" + "_" + str(100*round(1 - fraction_test, 5))
     name_folder_data_train = "PfamTrain"
     name_folder_data_test = "PfamTest"
-
-    name_folder_fasta_total = "Pfam_fasta_99_trimmed"
-
-
-
+    name_folder_fasta_total = "Pfam_fasta_99"
     path_folder_fasta_total = path_folder_data + name_folder_fasta_total
-    path_folder_data_train_test = path_folder_data + name_folder_data_train_test
-    trainTestSplit(path_folder_fasta_total, path_folder_data_train_test, name_folder_data_train, name_folder_data_test, fraction_test) 
+
+    list_percentage = [0.05, 0.5, 5, 50]   # respectively 9, 98, 981, 9816 seeds for the data_train 
+    for percentage_train in list_percentage:
+        name_folder_data_train_test = "PfamSplit" + "_" + str(percentage_train)
+        path_folder_data_train_test = path_folder_data + name_folder_data_train_test
+        trainTestSplit(path_folder_fasta_total, path_folder_data_train_test, name_folder_data_train, name_folder_data_test, percentage_train) 
+
+
+
+
+
+
+    # trimmed version
+
+    #path_folder_data = "/Users/pauline/Desktop/data/"    # dossier à créer ou l'on veut mettre toutes les data entrées/sorties
+    #name_folder_data_train = "PfamTrain"
+    #name_folder_data_test = "PfamTest"
+    #name_folder_fasta_total = "Pfam_fasta_99_trimmed"
+    #path_folder_fasta_total = path_folder_data + name_folder_fasta_total
+
+    #list_percentage = [0.05, 0.5, 5, 50]   # respectively 9, 91, 910, 9101 seeds for the data_train
+    #for percentage_train in list_percentage:
+    #    name_folder_data_train_test = "PfamSplit_trimmed" + "_" + str(percentage_train)
+    #    path_folder_data_train_test = path_folder_data + name_folder_data_train_test
+    #    trainTestSplit(path_folder_fasta_total, path_folder_data_train_test, name_folder_data_train, name_folder_data_test, percentage_train) 
     
