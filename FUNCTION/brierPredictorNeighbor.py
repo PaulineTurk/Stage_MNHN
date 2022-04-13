@@ -1,10 +1,10 @@
-import character as ch
+import FUNCTION.character as ch
 import pandas as pd
 from random import choice
 from numpy import transpose 
 import numpy as np
 
-
+# à voir à la fin
 def predictor01(liste_seq, num_accession, nom_dir_pid, Brier_count_global, count_global, pid_inf = 62):          # pas à changer par rapport au cas non-contextuel?
     pid_couple = np.load(nom_dir_pid + "/" + num_accession + ".pId.npy", allow_pickle='TRUE').item()
     list_AA = ch.characterList()
@@ -28,7 +28,7 @@ def predictor01(liste_seq, num_accession, nom_dir_pid, Brier_count_global, count
                                         Brier_count_global += (0 - 0)**2
     return Brier_count_global, count_global
 
-
+# à voir à la fin
 def predictorPerfect(liste_seq, num_accession, nom_dir_pid, Brier_count_global, count_global, pid_inf = 62):  # pas à changer par rapport au cas non-contextuel?
     pid_couple = np.load(nom_dir_pid + "/" + num_accession + ".pId.npy", allow_pickle='TRUE').item()
     list_AA = ch.characterList()
@@ -47,10 +47,9 @@ def predictorPerfect(liste_seq, num_accession, nom_dir_pid, Brier_count_global, 
     return Brier_count_global, count_global
 
 
-
-def predictorBlosumNeighbor(name_matrix_cond_proba):
+def predictorBlosumNeighbor(path_matrix_cond_proba):
     predictor_name = "Blosum Predictor Neighbor"
-    cond_proba_simple_contextual_Blosum = np.load(name_matrix_cond_proba ,allow_pickle='TRUE').item()
+    cond_proba_simple_contextual_Blosum = np.load(path_matrix_cond_proba ,allow_pickle='TRUE').item()
         
     df_cond_proba_Blosum = transpose(pd.DataFrame.from_dict(cond_proba_simple_contextual_Blosum))
     print("{}:\n".format(predictor_name), df_cond_proba_Blosum)
@@ -101,6 +100,10 @@ def predictorStationaryNeighbor(freq_aa):
     unit_Brier_stationnaire = unitBrierNeighbor(cond_proba_stationary)
     return predictor_name, cond_proba_stationary, unit_Brier_stationnaire
 
+
+
+
+
 def sumLine(cond_proba, list_AA, aa_k, aa_c):
     sum_line = 0
     for aa_p in list_AA:
@@ -109,9 +112,11 @@ def sumLine(cond_proba, list_AA, aa_k, aa_c):
 
 
 
-    
 
-def predictorIdentityNeighbor():
+
+def predictorIdentityNeighbor():   # je pense finalement que ce n'étais pas la peine de changer ce prédicteur
+    # il suffit de changer le mode de parcours des séquences
+    # donc changer brierMatrixNeighbor
     predictor_name = "Identity Predictor Neighbor"
     list_AA = ch.characterList()
     cond_proba_id = {}
@@ -146,7 +151,7 @@ def unitBrierNeighbor(cond_proba):
             for aa_c in list_AA:
                 unit = 0
                 for j in list_AA: 
-                    unit += (cond_proba[aa_k][j][aa_c] - int(aa_p == j))**2    # à ne regarder que la realisation de j (tjs)
+                    unit += (cond_proba[aa_k][j][aa_c] - int(aa_p == j))**2    # à ne regarder que la realisation de j ? (tjs)
                 unit_Brier[aa_k][aa_p][aa_c] = unit
     return unit_Brier
 
@@ -159,6 +164,7 @@ def brierMatrixNeighbor(predictor_name, unit_Brier, liste_seq, accession_num, di
                 Brier_count_global, count_global, delay_num, kp_SeqChoice, pid_inf = 62):
     pid_couple = np.load(dir_pid_name + "/" + accession_num + ".pId.npy", allow_pickle='TRUE').item()
     list_AA =  ch.characterList()
+
 
     if predictor_name in ["Blosum Predictor Neighbor", "Equiprobable Predictor Neighbor",  "Stationary Predictor Neighbor", "Identity Predictor Neighbor"]:  
         for name_k, seq_k in liste_seq:

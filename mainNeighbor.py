@@ -88,7 +88,7 @@ def conditionalProba(list_AA, triplet_count, pseudo_count = 0):
                 else:
                     cond_proba[aa_k][aa_p][aa_c] = 0
 
-    #for aa_k in list_AA:                   # the problem could only happen with very small databases (not the case here)
+    #for aa_k in list_AA:                   # the problem could only happen with very small databases (not the case here) ----- not sure ...
     #    for aa_c in list_AA:
     #        sum_line =sumLine(cond_proba, list_AA, aa_k, aa_c)
     #        if sum_line == 0:

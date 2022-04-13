@@ -43,7 +43,7 @@ def multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 62):
     return Brier_Score_global
 
 
-def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid_inf = 62):  
+def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, delay_num, kp_SeqChoice, pid_inf = 62):  
     """
     predicteur_name is taken from the list: 
     ["Blosum Predictor", "Equiprobable Predictor",  "Stationary Predictor", "Identity Predictor"]
@@ -59,8 +59,8 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid
     for file_name_fasta in files_in_path_folder_fasta:
         accession_num = os.path.basename(file_name_fasta).split(".")[0] + '.' + os.path.basename(file_name_fasta).split(".")[1]
         data_test = readFastaMul(file_name_fasta)
-        Brier_count_global, count_global = brn.brierNeighborMatrix(predictor_name, unit_Brier, data_test, accession_num, dir_pid_name, 
-                                                                 Brier_count_global, count_global, pid_inf)
+        Brier_count_global, count_global = brn.brierMatrixNeighbor(predictor_name, unit_Brier, data_test, accession_num, dir_pid_name, 
+                                                                 Brier_count_global, count_global, delay_num, kp_SeqChoice, pid_inf)
 
     Brier_Score_global = Brier_count_global/count_global
     t.stop("Brier Score with {}".format(predictor_name))
@@ -70,7 +70,7 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid
 
 
 if __name__ == '__main__': 
-    folder_fasta = "/Users/pauline/Desktop/data/Pfam_fasta_train_test/Pfam_fasta_train"
+    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.5/PfamTrain"
     dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
 
     ########################## Extreme, non-matrix predictors
@@ -117,15 +117,18 @@ if __name__ == '__main__':
 
 
     # Blosum Predictor  
-    #path_matrix = "matrice_nogaps_(1 , k).npy"
-    #cond_proba = np.load(path_matrix, allow_pickle='TRUE').item()
-    #df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))  # only for visualisation
-    #print(df_cond_proba)                                              # only for visualisation
-    #delay_num, kp_SeqChoice = 1 , "k"
-    #predictor_name, cond_proba_blosum, unit_Brier_Blosum = brn.predictorSimpleContextualBlosum(path_matrix)
-    #Brier_Score_global = brn.brierNeighborMatrix(predictor_name, folder_fasta, dir_pid_name, 
-                                          #unit_Brier_Blosum, delay_num, kp_SeqChoice, pid_inf = 62) 
-    #print(Brier_Score_global)
+    path_matrix = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_0.5/proba_cond_(1 , p).npy"
+    cond_proba = np.load(path_matrix, allow_pickle='TRUE').item()
+    df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))  # only for visualisation
+    print(df_cond_proba)                                              # only for visualisation
+    delay_num = 1 
+    #delay_num = 1 
+    #kp_SeqChoice = "k"
+    kp_SeqChoice = "p"
+    predictor_name, cond_proba_blosum, unit_Brier_Blosum = brn.predictorBlosumNeighbor(path_matrix)
+    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum,
+                                         delay_num, kp_SeqChoice) 
+    print(Brier_Score_global)
 
 
 
