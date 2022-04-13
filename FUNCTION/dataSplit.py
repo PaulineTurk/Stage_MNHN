@@ -42,6 +42,7 @@ def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_fo
 
     fraction_train = percentage_train/100
     x_train ,x_test = train_test_split(data_name, train_size = fraction_train)  
+    # https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
     # train_sizefloat or int, default=None
     # If float, should be between 0.0 and 1.0 and represent the proportion of the dataset to include in the train split. 
     # If int, represents the absolute number of train samples. 
