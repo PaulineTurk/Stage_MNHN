@@ -6,6 +6,8 @@ from fileNumber import countFile
 from sklearn.model_selection import train_test_split
 
 
+
+
 def addFileFromFolder(file_name, folder_name_source, folder_path_target, extension_file_name_target):
     path_file_source = folder_name_source + "/" + file_name
     accession_num = os.path.basename(file_name).split(".")[0] + '.' + os.path.basename(file_name).split(".")[1]
@@ -70,6 +72,7 @@ def trainTestSplit(name_folder_fasta_total, name_folder_data_train_test, name_fo
 
 if __name__ == '__main__': 
 
+    # data split train/test
     # not trimmed version
 
     path_folder_data = "/Users/pauline/Desktop/data/"    # dossier à créer ou l'on veut mettre toutes les data entrées/sorties
@@ -83,12 +86,10 @@ if __name__ == '__main__':
         name_folder_data_train_test = "PfamSplit" + "_" + str(percentage_train)
         path_folder_data_train_test = path_folder_data + name_folder_data_train_test
         trainTestSplit(path_folder_fasta_total, path_folder_data_train_test, name_folder_data_train, name_folder_data_test, percentage_train) 
-
-
-
-
-
-
+    
+    
+    
+    
     # trimmed version
 
     #path_folder_data = "/Users/pauline/Desktop/data/"    # dossier à créer ou l'on veut mettre toutes les data entrées/sorties
@@ -102,4 +103,4 @@ if __name__ == '__main__':
     #    name_folder_data_train_test = "PfamSplit_trimmed" + "_" + str(percentage_train)
     #    path_folder_data_train_test = path_folder_data + name_folder_data_train_test
     #    trainTestSplit(path_folder_fasta_total, path_folder_data_train_test, name_folder_data_train, name_folder_data_test, percentage_train) 
-    
+    pass

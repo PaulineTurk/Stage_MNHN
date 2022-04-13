@@ -6,9 +6,9 @@ import numpy as np
 import os 
 from math import sqrt
 import blosum as bl
-from FUNCTION.timer import Timer
-from FUNCTION.fastaReader import readFastaMul
-import FUNCTION.character as ch
+from timer import Timer
+from fastaReader import readFastaMul
+import character as ch
 
 
 

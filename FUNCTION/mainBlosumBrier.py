@@ -1,9 +1,10 @@
-from FUNCTION.fastaReader import readFastaMul
+from fastaReader import readFastaMul
+import brierPredictor as br
+from timer import Timer
 from pathlib import Path
-from FUNCTION.timer import Timer
 import os 
 import numpy as np
-import FUNCTION.brierPredictor as br
+
 
 
 

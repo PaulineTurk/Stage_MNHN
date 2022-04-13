@@ -1,4 +1,4 @@
-import FUNCTION.character as ch
+import character as ch
 import numpy as np
 import pandas as pd
 
@@ -59,5 +59,3 @@ def unitBrierNeighbor(cond_proba):
 
 #cond_proba = np.load("/Users/pauline/Desktop/data/NeighborRes/NeighborRes_0.05/proba_cond_(-1 , k).npy", allow_pickle='TRUE').item()
 #predictorStationaryNeighbor(cond_proba)
-
-print(1_545*486)

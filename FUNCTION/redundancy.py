@@ -1,15 +1,16 @@
 import os, shutil
 from pickle import FALSE
 from pathlib import Path
-import FUNCTION.PID as percentageID 
-from FUNCTION.timer import Timer
-from FUNCTION.fastaReader import readFastaMul
+import PID_save as percentageID 
+from timer import Timer
+from fastaReader import readFastaMul
+import character as ch
 
 
 
-def nonRedundant(file_fasta, pid_sup, file_seq_non_redundant, forbidden_symbol):
+def nonRedundant(file_fasta, pid_sup, file_seq_non_redundant, included_residue):
     liste_seq = readFastaMul(file_fasta)
-    cluster = percentageID.clusterAntiRedundancy(liste_seq, pid_sup, file_seq_non_redundant, forbidden_symbol)
+    cluster = percentageID.clusterAntiRedundancy(liste_seq, pid_sup, file_seq_non_redundant, included_residue)
     seq_non_redundant = percentageID.representativeNonRedundant(cluster)
 
     input_handle = open(file_fasta)
@@ -29,7 +30,7 @@ def nonRedundant(file_fasta, pid_sup, file_seq_non_redundant, forbidden_symbol):
 
 
 
-def savePIdNonRedondant(folder_fasta, folder_fasta_non_redondant, pid_sup, forbidden_symbol = ["B", "Z", "X", "-"]):
+def savePIdNonRedondant(folder_fasta, folder_fasta_non_redondant, pid_sup, included_residue):
     t = Timer()
     t.start()
     path_folder_fasta_non_redondant = folder_fasta_non_redondant + '/'
@@ -43,16 +44,13 @@ def savePIdNonRedondant(folder_fasta, folder_fasta_non_redondant, pid_sup, forbi
     for file_name_fasta in files_in_path_folder_fasta:
         accession_num = os.path.basename(file_name_fasta).split(".")[0] + '.' + os.path.basename(file_name_fasta).split(".")[1]
         file_name_fasta_non_redondant = accession_num + '.fasta.non.redundant'
-        nonRedundant(file_name_fasta, pid_sup, path_folder_fasta_non_redondant + file_name_fasta_non_redondant, forbidden_symbol)
+        nonRedundant(file_name_fasta, pid_sup, path_folder_fasta_non_redondant + file_name_fasta_non_redondant, included_residue)
     t.stop("Compute and save non-redundant files")
 
 
 
 
 if __name__ == '__main__': 
-    #savePIdNonRedondant("Pfam_fasta_trimAl_gappyout_header_corrected", "Pfam_fasta_trimAl_gappyout_header_corrected_non_redundant", 99) #3090.13537 s
-    #savePIdNonRedondant("Pfam_fasta_trimAl_nogaps_header_corrected", "Pfam_fasta_trimAl_nogaps_header_corrected_non_redundant", 99)   # 1568.50542 s  PF07703.17.fasta.non.redundant seul à seq vide --> fichier vide
-    
-
     ### mini test
-    savePIdNonRedondant("Pfam_test", "Pfam_test_99", 99)
+    list_AA = ch.characterList()
+    savePIdNonRedondant("Pfam_test", "Pfam_test_99", 99, list_AA)

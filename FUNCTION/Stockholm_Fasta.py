@@ -1,8 +1,8 @@
 from Bio import AlignIO
 import os, shutil
 from pathlib import Path
-from FUNCTION.timer import Timer
-import FUNCTION.fileNumber as cfn
+from timer import Timer
+import fileNumber as cfn
 
 
 

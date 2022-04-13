@@ -2,9 +2,9 @@ from pathlib import Path
 import os 
 import numpy as np
 import pandas as pd
-from FUNCTION.timer import Timer
-import FUNCTION.brierPredictorNeighbor as brn
-from FUNCTION.fastaReader import readFastaMul
+from timer import Timer
+import brierPredictorNeighbor as brn
+from fastaReader import readFastaMul
 
 
 def multiBrier01(folder_fasta, dir_pid_name, pid_inf = 62):   

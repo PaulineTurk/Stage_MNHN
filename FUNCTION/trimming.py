@@ -1,6 +1,6 @@
-from FUNCTION.fastaReader import readFastaMul
-from FUNCTION.timer import Timer
-import FUNCTION.character as ch
+from fastaReader import readFastaMul
+from timer import Timer
+import character as ch
 import os, shutil
 from pathlib import Path
 
