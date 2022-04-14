@@ -187,6 +187,10 @@ def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_re
             else:
                 proba_cond_blosum_ref[aa_1][aa_2] = 0
     
+    # visualisation df not normalized    (transpose to have the known aa read at each line)
+    df_proba_cond_blosum_ref = np.transpose(pd.DataFrame.from_dict(proba_cond_blosum_ref))
+    print(df_proba_cond_blosum_ref)
+    
     # normalisation (sum of each line = 1)
     proba_cond_blosum_ref_normalised = {}
     for aa_1 in residu_included:
@@ -195,9 +199,11 @@ def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_re
         print(sum_line)
         proba_cond_blosum_ref_normalised[aa_1] = {k: v/sum_line for k, v in proba_cond_blosum_ref[aa_1].items()}
     
-    # visualisation
-    df_proba_cond_blosum_ref_normalised = pd.DataFrame.from_dict(proba_cond_blosum_ref_normalised)   
+    # visualisation df normalized
+    df_proba_cond_blosum_ref_normalised = np.transpose(pd.DataFrame.from_dict(proba_cond_blosum_ref_normalised)) 
     print(df_proba_cond_blosum_ref_normalised)
+    sum_ligne = df_proba_cond_blosum_ref_normalised.sum(axis=1)
+    print("Somme des lignes:\n", sum_ligne)
     
     # save
     path_matrix = path_folder_BlosumRes_ref + "/Blosum_proba_cond_Ref"
