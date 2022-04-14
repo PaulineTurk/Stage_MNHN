@@ -167,11 +167,41 @@ def diffBlosum(my_blosum, blosum_ref_num = 62):
 
 
 
+# compute and save the conditional proba matrix of a BLOSUM of reference
+def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2):
+
+    if os.path.isdir(path_folder_BlosumRes_ref):
+        shutil.rmtree(path_folder_BlosumRes_ref) 
+    os.mkdir(path_folder_BlosumRes_ref)
 
 
-
-
-
+    blosum_ref = bl.BLOSUM(blosum_ref_num)
+    # reverse blosum_ref
+    proba_cond_blosum_ref = {}
+    for aa_1 in residu_included:
+        proba_cond_blosum_ref[aa_1] = {}
+        for aa_2 in residu_included:
+            blosum_score = blosum_ref[aa_1 + aa_2]
+            if blosum_score != 0:
+                proba_cond_blosum_ref[aa_1][aa_2] = np.exp(blosum_score/scale_factor)
+            else:
+                proba_cond_blosum_ref[aa_1][aa_2] = 0
+    
+    # normalisation (sum of each line = 1)
+    proba_cond_blosum_ref_normalised = {}
+    for aa_1 in residu_included:
+        sum_line = sum(proba_cond_blosum_ref[aa_1].values())
+        print(proba_cond_blosum_ref[aa_1])
+        print(sum_line)
+        proba_cond_blosum_ref_normalised[aa_1] = {k: v/sum_line for k, v in proba_cond_blosum_ref[aa_1].items()}
+    
+    # visualisation
+    df_proba_cond_blosum_ref_normalised = pd.DataFrame.from_dict(proba_cond_blosum_ref_normalised)   
+    print(df_proba_cond_blosum_ref_normalised)
+    
+    # save
+    path_matrix = path_folder_BlosumRes_ref + "/Blosum_proba_cond_Ref"
+    np.save(path_matrix, proba_cond_blosum_ref_normalised) 
 
 
 
@@ -179,24 +209,40 @@ def diffBlosum(my_blosum, blosum_ref_num = 62):
 
 if __name__ == '__main__': 
 
-    #name_matrix = "matrice_nogaps_1_seed"        # 0.19161   s    # Distance euclidienne: 48.32
-    #name_matrix = "matrice_nogaps_10_seed"       # 13.0144   s    # Distance euclidienne: 34.44
-    #name_matrix = "matrice_nogaps_100_seed"      # 27.53306  s    # Distance euclidienne: 26.12
-    #name_matrix = "matrice_nogaps_1000_seed"     # 342.20251 s    # Distance euclidienne: 27.46
-    #name_matrix = "matrice_nogaps_10000_seed"    # 3279.8419 s    # Distance euclidienne: 28.11
-    #folder_fasta = "Pfam_fasta_trimAl_nogaps_header_corrected_non_redundant"
 
 
 
-    path_pid_folder = "/Users/pauline/Desktop/data/PID_couple"
-    # /Users/pauline/Desktop/data/BlosumRes    à créer en amont
-    percentage_train = [0.05, 0.5, 5]  # 50 not already done ET à en récupérer la descrption avec dataCountDescription.py
-    for percentage in percentage_train:
-        print("Percentage Pfam for data_train:", percentage)
-        path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) 
-        path_folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage)  + "/PfamTrain"  
-        matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_fasta , path_pid_folder, pid_inf = 62, scale_factor = 2) 
-        diffBlosum(matrix_blosum, blosum_ref_num = 62)
+# test à prendre en compte
+
+# my blosum
+
+    #path_pid_folder = "/Users/pauline/Desktop/data/PID_couple"
+    ## /Users/pauline/Desktop/data/BlosumRes    à créer en amont
+    #percentage_train = [0.05, 0.5, 5]  # 50 not already done ET à en récupérer la descrption avec dataCountDescription.py
+    #for percentage in percentage_train:
+    #    print("Percentage Pfam for data_train:", percentage)
+    #    path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) 
+    #    path_folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage)  + "/PfamTrain"  
+    #    matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_fasta , path_pid_folder, pid_inf = 62, scale_factor = 2) 
+    #   diffBlosum(matrix_blosum, blosum_ref_num = 62)
+
+
+        # from the arbitrary data_train (sur données non trimée donc prend plus de temps qu'avant):
+        # 0.05 % Pfam: 2.17281 s, euclidian distance: 21.77 
+        # 0.5 % Pfam: 135.38645 s, euclidian distance: 20.02
+        # 5 % Pfam: 1059.3568 s, euclidian distance: 15.75
+
+
+
+
+# proba_cond blosum de réf (62%)
+    blosum_ref_num = 62 
+    residu_included = ch.characterList()
+    path_folder_BlosumRes_ref = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref" + str(blosum_ref_num)
+    scale_factor = 2
+
+    probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2)
+
 
 
         # from the arbitrary data_train (sur données non trimée donc prend plus de temps qu'avant):
@@ -211,6 +257,15 @@ if __name__ == '__main__':
 
 
 
+
+
+
+    #name_matrix = "matrice_nogaps_1_seed"        # 0.19161   s    # Distance euclidienne: 48.32
+    #name_matrix = "matrice_nogaps_10_seed"       # 13.0144   s    # Distance euclidienne: 34.44
+    #name_matrix = "matrice_nogaps_100_seed"      # 27.53306  s    # Distance euclidienne: 26.12
+    #name_matrix = "matrice_nogaps_1000_seed"     # 342.20251 s    # Distance euclidienne: 27.46
+    #name_matrix = "matrice_nogaps_10000_seed"    # 3279.8419 s    # Distance euclidienne: 28.11
+    #folder_fasta = "Pfam_fasta_trimAl_nogaps_header_corrected_non_redundant"
 
 
 
@@ -234,6 +289,15 @@ if __name__ == '__main__':
     # 50.0 % Pfam
     #path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_50.0"  
     #path_folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_50.0/PfamTrain"    # 9101 seeds, 1248.79718 s, euclidien distance: 32.28
+
+
+
+
+
+
+
+
+
 
 
 
