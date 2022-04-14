@@ -76,64 +76,102 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid
 
 if __name__ == '__main__': 
 
-    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain" 
+    #folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain" 
     #folder_fasta = "Pfam_test_trimmed_manuel" 
-    print("### Data TEST:", folder_fasta)
-    print("")
-    dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
+    #print("### Data TEST:", folder_fasta)
+    #print("")
+    #dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
 
     ########################## Extreme, non-matrix predictors
     # 01 predictor
-    worst_brier_score = multiBrier01(folder_fasta, dir_pid_name, pid_inf = 62)   
-    #worst_brier_score = multiBrier01(folder_fasta, dir_pid_name, pid_inf = 0)   
-    print("worst_brier_score:", worst_brier_score)
-    print("")
+    #worst_brier_score = multiBrier01(folder_fasta, dir_pid_name, pid_inf = 62)     
+    #print("worst_brier_score:", worst_brier_score)
+    #print("")
 
     # Perfect predictor
-    best_brier_score = multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 62)  
-    #best_brier_score = multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 0)  
-    print("best_brier_score:", best_brier_score)
-    print("")
+    #best_brier_score = multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 62)   
+    #print("best_brier_score:", best_brier_score)
+    #print("")
 
 
 
     ########################## Matrix predictors
     # Equiprobable Predictor
-    predictor_name, cond_proba_equiproba, unit_Brier_equiproba = br.predicteurEquiprobable()
-    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_equiproba, pid_inf = 62) 
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_equiproba, pid_inf = 0) 
-    print("Equiprobable Predictor Brier Score:", Brier_Score_global)
-    print("")
+    #predictor_name, cond_proba_equiproba, unit_Brier_equiproba = br.predicteurEquiprobable()
+    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_equiproba, pid_inf = 62) 
+    #print("Equiprobable Predictor Brier Score:", Brier_Score_global)
+    #print("")
 
 
 
     # Identity Predictor
-    predictor_name, cond_proba_id, unit_Brier_id = br.predictorIdentity()
-    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_id, pid_inf = 62) 
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_id, pid_inf = 0) 
-    print("Identity Predictor Brier Score:", Brier_Score_global)
-    print("")
+    #predictor_name, cond_proba_id, unit_Brier_id = br.predictorIdentity()
+    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_id, pid_inf = 62) 
+    #print("Identity Predictor Brier Score:", Brier_Score_global)
+    #print("")
 
 
     # Stationary Predictor
-    path_freq_aa_global = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_0.05/Blosum_freq_AA.npy"
+    #path_freq_aa_global = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_0.05/Blosum_freq_AA.npy"
     #path_freq_aa_global = "blosum_res_test/Blosum_freq_AA.npy"
-    print("### Data TRAIN:", path_freq_aa_global)
-    freq_aa_global = np.load(path_freq_aa_global, allow_pickle='TRUE').item()
-    predictor_name, cond_proba_stationary, unit_Brier_stationary = br.predictorStationary(freq_aa_global)
-    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_stationary, pid_inf = 62) 
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_stationary, pid_inf = 0) 
-    print("Stationary Predictor Brier Score:", Brier_Score_global)
-    print("")
+    #print("### Data TRAIN:", path_freq_aa_global)
+    #freq_aa_global = np.load(path_freq_aa_global, allow_pickle='TRUE').item()
+    #predictor_name, cond_proba_stationary, unit_Brier_stationary = br.predictorStationary(freq_aa_global)
+    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_stationary, pid_inf = 62) 
+    #print("Stationary Predictor Brier Score:", Brier_Score_global)
+    #print("")
 
 
 
 
-    # Blosum Predictor  
-    path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_0.05/Blosum_proba_cond.npy"
-    #path_matrix_cond_proba = "blosum_res_test/Blosum_proba_cond.npy"
-    print("### Data TRAIN:", path_matrix_cond_proba)
-    predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
-    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 0) 
-    print("Blosum Predictor Brier Score:", Brier_Score_global)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Blosum Predictor 
+    #dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
+    #list_percentage = [0.05, 0.5, 5]   # 50 not already done
+    #for percentage in list_percentage:
+        #print("")
+        #print(percentage)
+        #folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain" 
+        #path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) + "/Blosum_proba_cond.npy"
+        #predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
+        #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
+        #print("Blosum Predictor Brier Score:", Brier_Score_global)
+
+    # résultat sur données non trimmée et avec data_test = data_train:
+    # 0.05: 1.31896 s, 0.7911168602683646
+    # 0.5: 100.05061 s, 0.8696871995814536
+    # 5: 810.4333 s, 0.8059479425896071
+
+
+    # Blosum Predictor avec BLOSUM62 de référence
+    dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
+    list_percentage = [0.05, 0.5, 5]   # 50 not already done
+    for percentage in list_percentage:
+        print("")
+        print(percentage)
+        folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain" 
+        path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) + "/Blosum_proba_cond.npy"
+        predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
+        Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
+        print("Blosum Predictor Brier Score:", Brier_Score_global)
+
+    # résultat sur données non trimmée et avec data_test = data_train:
+    # 0.05: 1.31896 s, 0.7911168602683646
+    # 0.5: 100.05061 s, 0.8696871995814536
+    # 5: 810.4333 s, 0.8059479425896071

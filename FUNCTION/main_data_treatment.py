@@ -10,37 +10,38 @@ import pandas as pd
 
 
 # separation of the Stockholm file into Stockholm files
-file_name = "/Users/pauline/Desktop/data/Pfam-A.seed"
-folder_name = "/Users/pauline/Desktop/data/Pfam_Stockholm"
-SF.separationStockholm(file_name, folder_name) 
-cfn.countFile(folder_name)  
+#file_name = "/Users/pauline/Desktop/data/Pfam-A.seed"
+#folder_name = "/Users/pauline/Desktop/data/Pfam_Stockholm"
+#SF.separationStockholm(file_name, folder_name) 
+#cfn.countFile(folder_name)  
 
 
 # conversion from stockholm into fasta files
-folder_fasta = "/Users/pauline/Desktop/data/Pfam_fasta"
-folder_stockholm = "/Users/pauline/Desktop/data/Pfam_Stockholm"
-SF.multiStockholmToFasta(folder_fasta, folder_stockholm) 
-cfn.countFile(folder_fasta)  
+#folder_fasta = "/Users/pauline/Desktop/data/Pfam_fasta"
+#folder_stockholm = "/Users/pauline/Desktop/data/Pfam_Stockholm"
+#SF.multiStockholmToFasta(folder_fasta, folder_stockholm) 
+#cfn.countFile(folder_fasta)  
 
 
 # pid couple calculation
-path_folder_fasta =  "/Users/pauline/Desktop/data/Pfam_fasta"
-path_folder_pId =  "/Users/pauline/Desktop/data/PID_couple"
-pid.savePId(path_folder_fasta, path_folder_pId)   
+#path_folder_fasta =  "/Users/pauline/Desktop/data/Pfam_fasta"
+#path_folder_pId =  "/Users/pauline/Desktop/data/PID_couple"
+#pid.savePId(path_folder_fasta, path_folder_pId)   
 
 # visual check
-pid_check = np.load("/Users/pauline/Desktop/MINI_TEST/pid_couple/PF00244.23.pId.npy" ,allow_pickle='TRUE').item()  
-df_pid_check = np.transpose(pd.DataFrame.from_dict(pid_check))
-print(df_pid_check)  
+#pid_check = np.load("/Users/pauline/Desktop/MINI_TEST/pid_couple/PF00244.23.pId.npy" ,allow_pickle='TRUE').item()  
+#df_pid_check = np.transpose(pd.DataFrame.from_dict(pid_check))
+#print(df_pid_check)  
 
 
 
-# dealing with the redundancy issue
+# dealing with the redundancy issue   # ATTENTION : à relancer cet aprem/nuit pour réavoir Pfam_fasta_99
+                                      # + temps de calcul à récupérer
 folder_fasta =  "/Users/pauline/Desktop/data/Pfam_fasta"
 folder_fasta_non_redondant =   "/Users/pauline/Desktop/data/Pfam_fasta_99"
 pid_sup = 99
 list_AA = ch.characterList() 
-redundancy.savePIdNonRedondant(folder_fasta, folder_fasta_non_redondant, pid_sup, list_AA)  
+redundancy.savePIdNonRedondant(folder_fasta, folder_fasta_non_redondant, pid_sup, list_AA)  # 7272.81967 s
 
 
 # data trimming --> aborted

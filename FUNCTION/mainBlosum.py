@@ -190,12 +190,38 @@ if __name__ == '__main__':
 
     path_pid_folder = "/Users/pauline/Desktop/data/PID_couple"
     # /Users/pauline/Desktop/data/BlosumRes    à créer en amont
+    percentage_train = [0.05, 0.5, 5]  # 50 not already done ET à en récupérer la descrption avec dataCountDescription.py
+    for percentage in percentage_train:
+        print("Percentage Pfam for data_train:", percentage)
+        path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) 
+        path_folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage)  + "/PfamTrain"  
+        matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_fasta , path_pid_folder, pid_inf = 62, scale_factor = 2) 
+        diffBlosum(matrix_blosum, blosum_ref_num = 62)
+
+
+        # from the arbitrary data_train (sur données non trimée donc prend plus de temps qu'avant):
+        # 0.05 % Pfam: 2.17281 s, euclidian distance: 21.77 
+        # 0.5 % Pfam: 135.38645 s, euclidian distance: 20.02
+        # 5 % Pfam: 1059.3568 s, euclidian distance: 15.75
 
 
 
-    # 0.05 % Pfam
-    path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_0.05"  
-    path_folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain"   # 9 seeds,  0.80627 s, euclidien distance: 77.16
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ###### ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION, J'AURAI DU VOIR LA TETE DE CE JEU DE DONNÉES TEST, IL NE DEVAIT PAS ETRE IMMENSEMENT IMMENSE
+    # ANCIEN RÉSULTATS AVEC TRIMMING (approximation moins bonne de BLOSUM car plus grande distance euclidienne, meme avec 50% de Pfam_fasta_99_trimmed!)
+    # 0.05 % Pfam --> euclidian distance de l'odre de 70
 
     # 0.5 % Pfam
     #path_folder_BlosumResX = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_0.5"  
@@ -215,7 +241,7 @@ if __name__ == '__main__':
     #path_folder_BlosumResX = "blosum_res_test"  
     #path_folder_fasta = "Pfam_test_trimmed_manuel"   
 
-    matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_fasta , path_pid_folder, pid_inf = 62, scale_factor = 2) 
+    #matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_fasta , path_pid_folder, pid_inf = 62, scale_factor = 2) 
   
-    diffBlosum(matrix_blosum, blosum_ref_num = 62)
+    #diffBlosum(matrix_blosum, blosum_ref_num = 62)
 

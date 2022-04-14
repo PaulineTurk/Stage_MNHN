@@ -70,7 +70,7 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, del
 
 
 if __name__ == '__main__': 
-    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.5/PfamTrain"
+    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain"
     dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
 
     ########################## Extreme, non-matrix predictors
