@@ -169,11 +169,12 @@ def diffBlosum(my_blosum, blosum_ref_num = 62):
 
 # compute and save the conditional proba matrix of a BLOSUM of reference
 def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2):
+    t = Timer()
+    t.start()
 
     if os.path.isdir(path_folder_BlosumRes_ref):
         shutil.rmtree(path_folder_BlosumRes_ref) 
     os.mkdir(path_folder_BlosumRes_ref)
-
 
     blosum_ref = bl.BLOSUM(blosum_ref_num)
     # reverse blosum_ref
@@ -189,21 +190,22 @@ def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_re
     
     # visualisation df not normalized    (transpose to have the known aa read at each line)
     df_proba_cond_blosum_ref = np.transpose(pd.DataFrame.from_dict(proba_cond_blosum_ref))
-    print(df_proba_cond_blosum_ref)
+    #print(df_proba_cond_blosum_ref)
     
     # normalisation (sum of each line = 1)
     proba_cond_blosum_ref_normalised = {}
     for aa_1 in residu_included:
         sum_line = sum(proba_cond_blosum_ref[aa_1].values())
-        print(proba_cond_blosum_ref[aa_1])
-        print(sum_line)
+        #print(proba_cond_blosum_ref[aa_1])
+        #print(sum_line)
         proba_cond_blosum_ref_normalised[aa_1] = {k: v/sum_line for k, v in proba_cond_blosum_ref[aa_1].items()}
-    
+    t.stop("Compute the conditional proba matrix from a Blosum of reference")
+
     # visualisation df normalized
     df_proba_cond_blosum_ref_normalised = np.transpose(pd.DataFrame.from_dict(proba_cond_blosum_ref_normalised)) 
-    print(df_proba_cond_blosum_ref_normalised)
+    #print(df_proba_cond_blosum_ref_normalised)
     sum_ligne = df_proba_cond_blosum_ref_normalised.sum(axis=1)
-    print("Somme des lignes:\n", sum_ligne)
+    #print("Somme des lignes:\n", sum_ligne)
     
     # save
     path_matrix = path_folder_BlosumRes_ref + "/Blosum_proba_cond_Ref"
@@ -247,14 +249,7 @@ if __name__ == '__main__':
     path_folder_BlosumRes_ref = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref" + str(blosum_ref_num)
     scale_factor = 2
 
-    probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2)
-
-
-
-        # from the arbitrary data_train (sur données non trimée donc prend plus de temps qu'avant):
-        # 0.05 % Pfam: 2.17281 s, euclidian distance: 21.77 
-        # 0.5 % Pfam: 135.38645 s, euclidian distance: 20.02
-        # 5 % Pfam: 1059.3568 s, euclidian distance: 15.75
+    probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2) # 0.00281
 
 
 
