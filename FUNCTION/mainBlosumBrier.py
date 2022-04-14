@@ -166,12 +166,14 @@ if __name__ == '__main__':
         print("")
         print(percentage)
         folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain" 
-        path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_" + str(percentage) + "/Blosum_proba_cond.npy"
+        path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref62/Blosum_proba_cond_Ref.npy"
         predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
         Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
         print("Blosum Predictor Brier Score:", Brier_Score_global)
 
-    # résultat sur données non trimmée et avec data_test = data_train:
-    # 0.05: 1.31896 s, 0.7911168602683646
-    # 0.5: 100.05061 s, 0.8696871995814536
-    # 5: 810.4333 s, 0.8059479425896071
+    # résultat sur données non trimmée et avec data_test = data_train utilisé pour calculer Blosum meme si 
+    # on utilise cette fois-ci (BLOSUM62) Rq. ce n'étais pas la peine de recalculer les unit de Brier pour
+    # chaque data_Test comme on part tjs de BOSUM62 quel que soit le data_test testé:
+    # 0.05: 1.67675 s, 0.8459335064120398
+    # 0.5: 116.56326 s, 0.9929872469534892
+    # 5: 949.35 s, 0.8666057902074663’

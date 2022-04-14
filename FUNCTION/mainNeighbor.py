@@ -157,17 +157,20 @@ def simpleContextualBlosum(folder_fasta, path_folder_pid, path_NeighborResX, del
 if __name__ == '__main__': 
 
     # /Users/pauline/Desktop/data/NeighborRes    folder to create
-
-    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.5/PfamTrain"
     path_folder_pid = "/Users/pauline/Desktop/data/PID_couple"
-    path_NeighborResX = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_0.5"  # folder to create
-    delay_num = 1
-    kp_SeqChoice = "p"
-    path_proba_cond = simpleContextualBlosum(folder_fasta, path_folder_pid, path_NeighborResX, delay_num, kp_SeqChoice, pid_inf = 62, scale_factor = 2)
+    list_percentage = [0.05, 0.5]
+    for percentage in list_percentage:
+        folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) +"/PfamTrain"
+        path_NeighborResX = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_" + str(percentage)  # folder to create
+        for delay_num in [-1, 1]:
+            for kp_SeqChoice in ["k", "p"]:
+                print(percentage)
+                print("{}, {}".format(delay_num, kp_SeqChoice))
+                path_proba_cond = simpleContextualBlosum(folder_fasta, path_folder_pid, path_NeighborResX, delay_num, kp_SeqChoice, pid_inf = 62, scale_factor = 2)
   
-    # visual check
-    cond_proba = np.load(path_proba_cond, allow_pickle='TRUE').item()
-    df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))
-    print(df_cond_proba)  
+                # visual check
+                cond_proba = np.load(path_proba_cond, allow_pickle='TRUE').item()
+                df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))
+                print(df_cond_proba)  
 
  

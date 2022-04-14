@@ -116,22 +116,22 @@ if __name__ == '__main__':
 
 
 
-    # Blosum Predictor  
-    path_matrix = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_0.5/proba_cond_(1 , p).npy"
-    cond_proba = np.load(path_matrix, allow_pickle='TRUE').item()
-    df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))  # only for visualisation
-    print(df_cond_proba)                                              # only for visualisation
-    delay_num = 1 
-    #delay_num = 1 
-    #kp_SeqChoice = "k"
-    kp_SeqChoice = "p"
-    predictor_name, cond_proba_blosum, unit_Brier_Blosum = brn.predictorBlosumNeighbor(path_matrix)
-    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum,
+    # Blosum Predictor
+    list_percentage  = [0.05, 0.5]
+    for percentage in list_percentage:
+        for delay_num in [-1, 1]:
+            for kp_SeqChoice in ["k", "p"]:
+                print(percentage)
+                print("{}, {}".format(delay_num, kp_SeqChoice))
+                path_matrix = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_" + str(percentage) +"/proba_cond_(" +str(delay_num) + " , " + str(kp_SeqChoice)+").npy"
+                cond_proba = np.load(path_matrix, allow_pickle='TRUE').item()
+                #df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))  # only for visualisation
+                #print(df_cond_proba)                                              # only for visualisation
+
+                predictor_name, cond_proba_blosum, unit_Brier_Blosum = brn.predictorBlosumNeighbor(path_matrix)
+                Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum,
                                          delay_num, kp_SeqChoice) 
-    print(Brier_Score_global)
-
-
-
+                print(Brier_Score_global)
 
 
 

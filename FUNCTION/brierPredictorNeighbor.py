@@ -51,8 +51,8 @@ def predictorBlosumNeighbor(path_matrix_cond_proba):
     predictor_name = "Blosum Predictor Neighbor"
     cond_proba_simple_contextual_Blosum = np.load(path_matrix_cond_proba ,allow_pickle='TRUE').item()
         
-    df_cond_proba_Blosum = transpose(pd.DataFrame.from_dict(cond_proba_simple_contextual_Blosum))
-    print("{}:\n".format(predictor_name), df_cond_proba_Blosum)
+    #df_cond_proba_Blosum = transpose(pd.DataFrame.from_dict(cond_proba_simple_contextual_Blosum))
+    #print("{}:\n".format(predictor_name), df_cond_proba_Blosum)
     #sum_ligne = df_cond_proba_Blosum.sum(axis=1)
     #print("Somme des lignes:\n", sum_ligne)
 
