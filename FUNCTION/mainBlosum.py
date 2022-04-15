@@ -83,6 +83,7 @@ def multiBlosum(path_folder_BlosumResX, path_folder_fasta, path_pid_folder, pid_
 
     for file_name_fasta in files_in_path_folder_fasta:
             accession_num = os.path.basename(file_name_fasta).split(".")[0] + '.' + os.path.basename(file_name_fasta).split(".")[1]
+            print("ACCESSION NUMBER:", accession_num)
             count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global = oneFasta(accession_num, path_pid_folder, file_name_fasta, pid_inf, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global)
 
 
@@ -241,15 +242,51 @@ if __name__ == '__main__':
         # 5 % Pfam: 1059.3568 s, euclidian distance: 15.75
 
 
+# my blosum bis (function structuration)
+
+    def conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False):
+        print(percentage_train)
+
+        # intial data_train/test
+        path_folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "_test" + "/PfamTrain"   # ATTENTION: plutot à splitter en A et B puis selon leur usage les appeler train/test
+        path_folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "_test" + "/PfamTest" 
+        print("folder_fasta_train:", path_folder_fasta_train)
+
+        # some precisions on the matrix name
+        # A/B to distinguish between a a dataset and it's reverse situation
+        if train_test_reverse == False:
+            path_folder_train = path_folder_fasta_train
+            path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_A_" + str(version)
+        else:
+            path_folder_train = path_folder_fasta_test
+            path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_B_"+ str(version)
+        print("folder_train:", path_folder_train)
 
 
-# proba_cond blosum de réf (62%)
-    blosum_ref_num = 62 
-    residu_included = ch.characterList()
-    path_folder_BlosumRes_ref = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref" + str(blosum_ref_num)
-    scale_factor = 2
+        matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_train , path_pid, pid_inf = 62, scale_factor = 2) 
+        diffBlosum(matrix_blosum, blosum_ref_num = 62)
 
-    probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2) # 0.00281
+
+    path_data = "/Users/pauline/Desktop/data"
+    percentage_train = 0.05
+    path_pid = "/Users/pauline/Desktop/data/PID_couple"
+    path_BlosumRes = "/Users/pauline/Desktop/data/BlosumResTEST" # folder to create manually
+    version = 0
+    conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False)    
+    conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = True)
+
+
+
+
+
+
+# proba_cond blosum de réf (62%) --> approximation, je dois obtenir un score de Brier plus bas avec ma Blosum
+    #blosum_ref_num = 62 
+    #residu_included = ch.characterList()
+    #path_folder_BlosumRes_ref = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref" + str(blosum_ref_num)
+    #scale_factor = 2
+
+    #probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_ref, scale_factor = 2) # 0.00281
 
 
 
