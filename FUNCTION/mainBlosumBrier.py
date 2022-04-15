@@ -159,17 +159,69 @@ if __name__ == '__main__':
     # 5: 810.4333 s, 0.8059479425896071
 
 
-    # Blosum Predictor avec BLOSUM62 de référence
-    dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
-    list_percentage = [0.05, 0.5, 5]   # 50 not already done
-    for percentage in list_percentage:
-        print("")
-        print(percentage)
-        folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain" 
-        path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref62/Blosum_proba_cond_Ref.npy"
+
+# overfitting ?
+
+    def overfittingTest(version, path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_matrix_cond_proba):
+
+        print(percentage_train)
+        # intial data_train/test
+        folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "_test" + "/PfamTrain"   # ATTENTION changer l'appel, le généraliser plus
+        folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "_test" + "/PfamTest" 
+        print("folder_fasta_train:", folder_fasta_train)
+        print("folder_fasta_test:", folder_fasta_test)
+
+        # possible combination of data_train/test
+        if train_test_reverse == False:
+            folder_train = folder_fasta_train
+            path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_A_" + str(version) + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+            if test_is_train == True:
+                folder_test = folder_train        
+            else:
+                folder_test = folder_fasta_test
+        else:
+            folder_train = folder_fasta_test
+            path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_B_" + str(version) + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+
+            if test_is_train == True:
+                folder_test = folder_train
+            else:
+                folder_test = folder_fasta_train
+
+        print("folder_train:", folder_train)
+        print("folder_test:", folder_test)
+
         predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
-        Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
+        Brier_Score_global = multiBrierMatrix(predictor_name, folder_test, path_pid, unit_Brier_Blosum, pid_inf = 62) 
         print("Blosum Predictor Brier Score:", Brier_Score_global)
+        print("")
+
+
+if __name__ == '__main__': 
+    path_data = "/Users/pauline/Desktop/data"
+    percentage_train = 0.05
+    path_pid = "/Users/pauline/Desktop/data/PID_couple"
+    path_BlosumRes = "/Users/pauline/Desktop/data/BlosumResTEST"
+    version = 0
+    for test_is_train in [True, False]:
+        for train_test_reverse in [True, False]:
+            print("test_is_train:", test_is_train)
+            print("train_test_reverse:", train_test_reverse)
+            overfittingTest(version, path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_BlosumRes)
+
+
+
+    # Blosum Predictor avec BLOSUM62 de référence
+    #dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
+    #list_percentage = [0.05, 0.5, 5]   # 50 not already done
+    #for percentage in list_percentage:
+    #    print("")
+    #    print(percentage)
+    #    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain" 
+    #    path_matrix_cond_proba = "/Users/pauline/Desktop/data/BlosumRes/BlosumRes_ref62/Blosum_proba_cond_Ref.npy"
+    #    predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
+    #    Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum, pid_inf = 62) 
+    #    print("Blosum Predictor Brier Score:", Brier_Score_global)
 
     # résultat sur données non trimmée et avec data_test = data_train utilisé pour calculer Blosum meme si 
     # on utilise cette fois-ci (BLOSUM62) Rq. ce n'étais pas la peine de recalculer les unit de Brier pour
