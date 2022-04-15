@@ -3,6 +3,7 @@ import pandas as pd
 from timer import Timer
 import character as ch
 from fastaReader import readFastaMul
+import matplotlib.pyplot as plt
 
 
 
@@ -26,7 +27,6 @@ def dataCountDescription(folder_fasta):
     residu_count_distribution = {}   # consider all residus (dico construction along the way)
 
 
-
     for file_name_fasta in files_in_path_folder_fasta:
         #accession_num = os.path.basename(file_name_fasta).split(".")[0] + '.' + os.path.basename(file_name_fasta).split(".")[1]
         data_Pfam = readFastaMul(file_name_fasta)
@@ -44,7 +44,6 @@ def dataCountDescription(folder_fasta):
                     residu_count_distribution[aa] += 1
                 else:
                     residu_count_distribution[aa] = 1
-    t.stop("Count couple context")
 
 
     print("nbre_seed:", '{:,.2f}'.format(nbre_seed))
@@ -58,17 +57,21 @@ def dataCountDescription(folder_fasta):
     # mean nbre seq /seed
     mean_nbre_seq = round(nbre_seq/nbre_seed, 2)
     print("mean_nbre_seq:", '{:,.2f}'.format(mean_nbre_seq))
-
+    t.stop("Description time")
     # aa percentage distribution
     residu_percentage_distribution = {k: round(100*v / total_residu, 2) for k, v in residu_count_distribution.items()}
-    print("residu_count_distribution:", residu_count_distribution)
-    print("residu_percentage_distribution:", residu_percentage_distribution)
-
+    #print("residu_count_distribution:", residu_count_distribution)
+    #print("residu_percentage_distribution:", residu_percentage_distribution)
+    plt.bar(list(residu_percentage_distribution.keys()), residu_percentage_distribution.values(), color='g')
+    plt.xlabel('Residus')
+    plt.ylabel('Pourcentage')
+    plt.title('Pourcentage de chaque résidu du data_train ' + str(percentage))
+    plt.show()
     minCount, maxCount = minMaxCount(count_couple_context)
     print("minCount couple aa:", '{:,.2f}'.format(minCount))
     print("maxCount couple aa:", '{:,.2f}'.format(maxCount))
     df_matrixCount = pd.DataFrame.from_dict(count_couple_context)  
-
+    
     return df_matrixCount
 
 def minMaxCount(double_dico):
@@ -86,14 +89,16 @@ def minMaxCount(double_dico):
 
 
 
-if __name__ == '__main__':  
+if __name__ == '__main__': 
+    list_percentage = [0.05, 0.5, 5, 50]
+    for percentage in list_percentage:
+        folder_pfam_name = "/Users/pauline/Desktop/data/PfamSplit_" + str(percentage) + "/PfamTrain"
+        print(folder_pfam_name)
+        df_matrixCount = dataCountDescription(folder_pfam_name)
+        #print(df_matrixCount)
+
+
+
     #folder_pfam_name = "/Users/pauline/Desktop/data/Pfam_fasta"     
     #folder_pfam_name = "/Users/pauline/Desktop/data/Pfam_fasta_99"   
     #folder_pfam_name = "/Users/pauline/Desktop/data/Pfam_fasta_99_trimmed" 
-    folder_pfam_name = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain"
-    #folder_pfam_name = "/Users/pauline/Desktop/data/PfamSplit_0.5/PfamTrain"
-    #folder_pfam_name = "/Users/pauline/Desktop/data/PfamSplit_5.0/PfamTrain"
-    #folder_pfam_name = "/Users/pauline/Desktop/data/PfamSplit_50.0/PfamTrain"
-    print(folder_pfam_name)
-    df_matrixCount = dataCountDescription(folder_pfam_name)
-    #print(df_matrixCount)
