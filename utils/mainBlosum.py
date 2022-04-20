@@ -6,6 +6,7 @@ import numpy as np
 import os 
 from math import sqrt
 import blosum as bl
+from sklearn.metrics import euclidean_distances
 from timer import Timer
 from fastaReader import readFastaMul
 import character as ch
@@ -88,7 +89,7 @@ def multiBlosum(path_folder_BlosumResX, path_folder_fasta, path_pid_folder, pid_
 
     for file_name_fasta in files_in_path_folder_fasta:
             accession_num = os.path.basename(file_name_fasta).split(".")[0] + '.' + os.path.basename(file_name_fasta).split(".")[1]
-            print("ACCESSION NUMBER:", accession_num)
+            #print("ACCESSION NUMBER:", accession_num)
             count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global = oneFasta(accession_num, path_pid_folder, file_name_fasta, pid_inf, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global)
 
 
@@ -161,19 +162,26 @@ def multiBlosum(path_folder_BlosumResX, path_folder_fasta, path_pid_folder, pid_
 def diffBlosum(my_blosum, blosum_ref_num = 62):
     """Quantify the distance between my_blosum and a reference blosum"""
     blosum_ref = bl.BLOSUM(blosum_ref_num) 
-    euclidiean_d = 0
     matrix_diff = {}
+    average_diff = 0
+    count = 0
+    euclidean_d = 0
     list_AA = ch.characterList()
     for aa1 in list_AA:
         matrix_diff[aa1] = {}
         for aa2 in list_AA:
-            euclidiean_d += (my_blosum[aa1][aa2] - blosum_ref[aa1 + aa2])**2
             matrix_diff[aa1][aa2] = my_blosum[aa1][aa2] - blosum_ref[aa1 + aa2]
-    print("Euclidean distance: {}".format(round(sqrt(euclidiean_d), 2)))
-    print("My Blosum - The reference Blosum{} :".format(blosum_ref_num))
-    df_matrix_diff = pd.DataFrame.from_dict(matrix_diff)
-    return matrix_diff, df_matrix_diff, blosum_ref_num
+            average_diff += matrix_diff[aa1][aa2]
+            euclidean_d += (matrix_diff[aa1][aa2])**2
+            count += 1
 
+    #print("My Blosum - the reference Blosum{} :".format(blosum_ref_num))
+    euclidean_d = round(sqrt(euclidean_d), 2)
+    #print("Euclidean distance: {}".format(euclidean_d))
+    average_diff = average_diff/count
+    #print("count:", count)
+    #print("average difference", average_diff)
+    return matrix_diff, blosum_ref_num, euclidean_d, average_diff 
 
 
 
@@ -230,38 +238,39 @@ def conditionalProbaGenerator(path_data, percentage_train, path_pid, path_Blosum
     # intial data_train/test
     path_folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) +  "/PfamTrain"   
     path_folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) +  "/PfamTest" 
-    print("folder_fasta_train:", path_folder_fasta_train)
+    #print("folder_fasta_train:", path_folder_fasta_train)
 
     # some precisions on the matrix name
     # A/B to distinguish between a a dataset and it's reverse situation
     if train_test_reverse == False:
         path_folder_train = path_folder_fasta_train
-        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_A_"  
+        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_A"  
     else:
         path_folder_train = path_folder_fasta_test
-        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_B_" # with B, the real % is 100-percentage_train
+        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_B" # with B, the real % is 100-percentage_train
     print("folder_train:", path_folder_train)
     matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_train , path_pid, pid_inf = 62, scale_factor = 2) 
     heatmap_cond_proba = pd.DataFrame(matrix_cond_proba).T.fillna(0)
     heatmap = sb.heatmap(heatmap_cond_proba)
+    plt.yticks(rotation=0) 
     heatmap_figure = heatmap.get_figure()    
     name_folder_Res = os.path.basename(path_folder_BlosumResX)
-    name_heatmap = "Heatmap Conditional proba {}.png".format(name_folder_Res)    # change title (remove   .png) + add euclidian distance et/ou moyenne
+    name_heatmap = "Heatmap Conditional proba {}".format(name_folder_Res)   
     plt.title(name_heatmap)
     plt.close()
-    heatmap_figure.savefig(path_BlosumRes +"/"+ name_heatmap, dpi=400)
+    heatmap_figure.savefig(path_BlosumRes +"/"+ name_heatmap + ".png", dpi=400)
 
     # difference with Blosum
-    matrix_diff, df_matrix_diff, blosum_ref_num= diffBlosum(matrix_blosum, blosum_ref_num = 62)
-    print(df_matrix_diff)
-    heatmap_matrix_diff = pd.DataFrame(matrix_diff).T.fillna(0)
-    heatmap = sb.heatmap(heatmap_matrix_diff)
+    matrix_diff, blosum_ref_num, euclidean_d, average_diff = diffBlosum(matrix_blosum, blosum_ref_num = 62)
+    df_matrix_diff = pd.DataFrame(matrix_diff).T.fillna(0)
+    heatmap = sb.heatmap(df_matrix_diff)
+    plt.yticks(rotation=0) 
     heatmap_figure = heatmap.get_figure()    
     name_folder_Res = os.path.basename(path_folder_BlosumResX)
-    name_heatmap = "Heatmap difference with Blosum{} ref {}.png".format(blosum_ref_num, name_folder_Res)
-    plt.title(name_heatmap)
+    heatmap_title = "Heatmap difference {} - Blosum{} ref:\n cubic euclidean distance = {}, average difference = {}".format(name_folder_Res, blosum_ref_num, euclidean_d, average_diff)
+    plt.title(heatmap_title)
     plt.close()
-    heatmap_figure.savefig(path_BlosumRes +"/"+ name_heatmap, dpi=400)
+    heatmap_figure.savefig(path_BlosumRes +"/"+ "Heatmap difference {} - Blosum{} ref".format(name_folder_Res, blosum_ref_num) + ".png", dpi=400)
 
 
 

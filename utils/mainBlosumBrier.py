@@ -87,24 +87,24 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid
 
 def overfittingTest(path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_BlosumRes):
 
-    print("percentage_train:", percentage_train)
+    #print("percentage_train:", percentage_train)
     # intial data_train/test
     folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "/PfamTrain"   # ATTENTION changer l'appel, le généraliser plus
     folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "/PfamTest" 
-    print("folder_fasta_train:", folder_fasta_train)
-    print("folder_fasta_test:", folder_fasta_test)
+    #print("folder_fasta_train:", folder_fasta_train)
+    #print("folder_fasta_test:", folder_fasta_test)
 
     # possible combination of data_train/test
     if train_test_reverse == False:
         folder_train = folder_fasta_train
-        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_A_" +  "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_A" +  "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
         if test_is_train == True:
             folder_test = folder_train        
         else:
             folder_test = folder_fasta_test
     else:
         folder_train = folder_fasta_test
-        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_B_" + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_B" + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
 
         if test_is_train == True:
             folder_test = folder_train
