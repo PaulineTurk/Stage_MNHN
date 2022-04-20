@@ -22,7 +22,7 @@ import dataCountDescription
 #Initial configuration
 # manual initialisation of a folder containing Pfam-A.seed downloaded from Pfam
 path_main_folder =  "/Users/pauline/Desktop/Overfitting_test" 
-path_file_from_Pfam = "/Users/pauline/Desktop/Overfitting_test/Pfam-A.seed.test"
+path_file_from_Pfam = "/Users/pauline/Desktop/Overfitting_test/Pfam-A.seed"
 
 
 #####################  User choices
