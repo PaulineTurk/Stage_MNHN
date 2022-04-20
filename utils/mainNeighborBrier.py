@@ -69,6 +69,11 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, del
 
 
 
+
+
+
+
+
 if __name__ == '__main__': 
     folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain"
     dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
@@ -116,6 +121,13 @@ if __name__ == '__main__':
 
 
 
+
+
+
+
+
+
+
     # Blosum Predictor
     list_percentage  = [0.05, 0.5]
     for percentage in list_percentage:
@@ -133,9 +145,3 @@ if __name__ == '__main__':
                                          delay_num, kp_SeqChoice) 
                 print(Brier_Score_global)
 
-
-
-
-    ##### nbre_block = 10      # Score: 0.8011259348825893    # 8.95182 s
-    ##### nbre_block = 100     # Score: 0.7699080119866685    # 17.15007 s
-    ##### nbre_block = 1000    # Score: 0.7445928173406464    # 213.03552 s

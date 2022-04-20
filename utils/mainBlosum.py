@@ -9,6 +9,11 @@ import blosum as bl
 from timer import Timer
 from fastaReader import readFastaMul
 import character as ch
+import seaborn as sb
+import matplotlib.pyplot as plt
+
+
+
 
 
 
@@ -90,7 +95,10 @@ def multiBlosum(path_folder_BlosumResX, path_folder_fasta, path_pid_folder, pid_
 
     freq_aa_global = {}
     for aa in list_AA:
-        freq_aa_global[aa] = count_aa_global[aa]/nbre_aa_global
+        if nbre_aa_global != 0:
+            freq_aa_global[aa] = count_aa_global[aa]/nbre_aa_global
+        else: 
+            freq_aa_global[aa] = 0
     path_freqAA = path_folder_BlosumResX + "/Blosum_freq_AA"
     np.save(path_freqAA, freq_aa_global) 
     
@@ -101,7 +109,11 @@ def multiBlosum(path_folder_BlosumResX, path_folder_fasta, path_pid_folder, pid_
     for aa_1 in list_AA:
         freq_couple_aa_global[aa_1] = {}
         for aa_2 in list_AA:
-            freq_couple_aa_global[aa_1][aa_2] = count_couple_aa_global[aa_1][aa_2]/nbre_couple_aa_global
+            if nbre_couple_aa_global != 0:
+                freq_couple_aa_global[aa_1][aa_2] = count_couple_aa_global[aa_1][aa_2]/nbre_couple_aa_global
+            else:
+                freq_couple_aa_global[aa_1][aa_2] = 0
+
 
 
     # compute and save the Blosum matrix 
@@ -160,7 +172,7 @@ def diffBlosum(my_blosum, blosum_ref_num = 62):
     print("Euclidean distance: {}".format(round(sqrt(euclidiean_d), 2)))
     print("My Blosum - The reference Blosum{} :".format(blosum_ref_num))
     df_matrix_diff = pd.DataFrame.from_dict(matrix_diff)
-    print(df_matrix_diff)
+    return matrix_diff, df_matrix_diff, blosum_ref_num
 
 
 
@@ -213,6 +225,43 @@ def probaCondReference(blosum_ref_num, residu_included, path_folder_BlosumRes_re
     np.save(path_matrix, proba_cond_blosum_ref_normalised) 
 
 
+def conditionalProbaGenerator(path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False):
+    #print(percentage_train)
+    # intial data_train/test
+    path_folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) +  "/PfamTrain"   
+    path_folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) +  "/PfamTest" 
+    print("folder_fasta_train:", path_folder_fasta_train)
+
+    # some precisions on the matrix name
+    # A/B to distinguish between a a dataset and it's reverse situation
+    if train_test_reverse == False:
+        path_folder_train = path_folder_fasta_train
+        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_A_"  
+    else:
+        path_folder_train = path_folder_fasta_test
+        path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_B_" # with B, the real % is 100-percentage_train
+    print("folder_train:", path_folder_train)
+    matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_train , path_pid, pid_inf = 62, scale_factor = 2) 
+    heatmap_cond_proba = pd.DataFrame(matrix_cond_proba).T.fillna(0)
+    heatmap = sb.heatmap(heatmap_cond_proba)
+    heatmap_figure = heatmap.get_figure()    
+    name_folder_Res = os.path.basename(path_folder_BlosumResX)
+    name_heatmap = "Heatmap Conditional proba {}.png".format(name_folder_Res)    # change title (remove   .png) + add euclidian distance et/ou moyenne
+    plt.title(name_heatmap)
+    plt.close()
+    heatmap_figure.savefig(path_BlosumRes +"/"+ name_heatmap, dpi=400)
+
+    # difference with Blosum
+    matrix_diff, df_matrix_diff, blosum_ref_num= diffBlosum(matrix_blosum, blosum_ref_num = 62)
+    print(df_matrix_diff)
+    heatmap_matrix_diff = pd.DataFrame(matrix_diff).T.fillna(0)
+    heatmap = sb.heatmap(heatmap_matrix_diff)
+    heatmap_figure = heatmap.get_figure()    
+    name_folder_Res = os.path.basename(path_folder_BlosumResX)
+    name_heatmap = "Heatmap difference with Blosum{} ref {}.png".format(blosum_ref_num, name_folder_Res)
+    plt.title(name_heatmap)
+    plt.close()
+    heatmap_figure.savefig(path_BlosumRes +"/"+ name_heatmap, dpi=400)
 
 
 
@@ -244,39 +293,16 @@ if __name__ == '__main__':
 
 # my blosum bis (function structuration)
 
-    def conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False):
-        print(percentage_train)
-
-        # intial data_train/test
-        path_folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "_test" + "/PfamTrain"   # ATTENTION: plutot à splitter en A et B puis selon leur usage les appeler train/test
-        path_folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "_test" + "/PfamTest" 
-        print("folder_fasta_train:", path_folder_fasta_train)
-
-        # some precisions on the matrix name
-        # A/B to distinguish between a a dataset and it's reverse situation
-        if train_test_reverse == False:
-            path_folder_train = path_folder_fasta_train
-            path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_A_" + str(version)
-        else:
-            path_folder_train = path_folder_fasta_test
-            path_folder_BlosumResX = path_BlosumRes + "/BlosumRes_" + str(percentage_train) +"_B_"+ str(version)
-        print("folder_train:", path_folder_train)
 
 
-        matrix_blosum, matrix_cond_proba, count_aa_global, nbre_aa_global, count_couple_aa_global, nbre_couple_aa_global  = multiBlosum(path_folder_BlosumResX, path_folder_train , path_pid, pid_inf = 62, scale_factor = 2) 
-        diffBlosum(matrix_blosum, blosum_ref_num = 62)
 
 
     path_data = "/Users/pauline/Desktop/data"
     percentage_train = 0.05
     path_pid = "/Users/pauline/Desktop/data/PID_couple"
     path_BlosumRes = "/Users/pauline/Desktop/data/BlosumResTEST" # folder to create manually
-    version = 0
-    conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False)    
-    conditionalProbaGenerator(version, path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = True)
-
-
-
+    conditionalProbaGenerator(path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = False)    
+    conditionalProbaGenerator(path_data, percentage_train, path_pid, path_BlosumRes, train_test_reverse = True)
 
 
 

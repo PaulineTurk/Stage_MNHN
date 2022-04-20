@@ -50,6 +50,10 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
 
 
 
+
+
+
+
 def initialisation(list_symbol):
     triplet_count = {}
     for aa_k in list_symbol:

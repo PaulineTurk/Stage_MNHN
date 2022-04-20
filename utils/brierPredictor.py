@@ -10,7 +10,7 @@ def predictor01(liste_seq, num_accession, nom_dir_pid, Brier_count_global, count
     list_AA = ch.characterList()
     for name_1, seq_1 in liste_seq:
         for name_2 ,seq_2 in liste_seq:
-            if name_1 != name_2:      # ATTANTION, ATTENTION, ATTENTION, à vérifier qu'on ne les compte pas
+            if name_1 != name_2:     
                 if pid_couple[name_1][name_2] >= pid_inf:
                     for (aa_1, aa_2) in zip(seq_1, seq_2):
                         if aa_1 in list_AA and aa_2 in list_AA:
@@ -34,7 +34,7 @@ def predictorPerfect(liste_seq, num_accession, nom_dir_pid, Brier_count_global, 
     list_AA = ch.characterList()
     for name_1, seq_1 in liste_seq:
         for name_2 ,seq_2 in liste_seq:
-            if name_1 != name_2:      # ATTANTION, ATTENTION, ATTENTION, à vérifier qu'on ne les compte pas
+            if name_1 != name_2:     
                 if pid_couple[name_1][name_2] >= pid_inf:
                     for (aa_1, aa_2) in zip(seq_1, seq_2):
                         if aa_1 in list_AA and aa_2 in list_AA:
@@ -71,11 +71,6 @@ def predicteurEquiprobable():
         for elem_c in liste_AA:
             cond_proba_equiproba[elem_l][elem_c] = 1/nbreAA
 
-    #df_cond_proba_equiproba = transpose(pd.DataFrame.from_dict(cond_proba_equiproba))
-    #print("{}:\n".format(predictor_name), df_cond_proba_equiproba)
-    #sum_ligne = df_cond_proba_equiproba.sum(axis=1)
-    #print("Somme des lignes:\n", sum_ligne)
-
     unit_Brier_equiproba = unitBrier(cond_proba_equiproba)
     return predictor_name, cond_proba_equiproba, unit_Brier_equiproba
 
@@ -91,11 +86,6 @@ def predictorStationary(freq_aa):
                 cond_proba_stationary [elem_l][elem_c] = freq_aa[elem_c]
             else:
                 cond_proba_stationary [elem_l][elem_c] = 0
-
-    #df_cond_proba_stationary = transpose(pd.DataFrame.from_dict(cond_proba_stationary))
-    #print("{}:\n".format(predictor_name), df_cond_proba_stationary)
-    #sum_ligne = df_cond_proba_stationary.sum(axis=1)
-    #print("Somme des lignes:\n", sum_ligne)
     
     unit_Brier_stationnaire = unitBrier(cond_proba_stationary)
     return predictor_name, cond_proba_stationary, unit_Brier_stationnaire
@@ -112,11 +102,6 @@ def predictorIdentity():
                 cond_proba_id[elem_l][elem_c] = 1
             else:
                 cond_proba_id[elem_l][elem_c] = 0
-
-    #df_cond_proba_id = transpose(pd.DataFrame.from_dict(cond_proba_id))
-    #print("{}:\n".format(predictor_name), df_cond_proba_id)
-    #sum_ligne = df_cond_proba_id.sum(axis=1)
-    #print("Somme des lignes:\n", sum_ligne)
     
     unit_brier_id = unitBrier(cond_proba_id)
     return predictor_name, cond_proba_id, unit_brier_id

@@ -23,9 +23,14 @@ def multiBrier01(folder_fasta, dir_pid_name, pid_inf = 62):
         data_test = readFastaMul(file_name_fasta)
         Brier_count_global, count_global  = br.predictor01(data_test, accession_num, dir_pid_name, 
                                                                   Brier_count_global, count_global, pid_inf)
-    Brier_Score_global = Brier_count_global/count_global
+    if count_global != 0:
+        Brier_Score_global = Brier_count_global/count_global
+    else:
+        Brier_Score_global = None
+        print("Brier Score not computable because count_gloable = 0")
     t.stop("Brier Score with predictor 0/1 (worst case scenario)")
     return Brier_Score_global
+
 
 
 
@@ -43,6 +48,8 @@ def multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 62):
         data_test = readFastaMul(file_name_fasta)
         Brier_count_global, count_global  = br.predictorPerfect(data_test, accession_num, dir_pid_name, 
                                                                   Brier_count_global, count_global, pid_inf)
+    
+
     Brier_Score_global = Brier_count_global/count_global
     t.stop("Brier Score with perfect predictor")
     return Brier_Score_global
@@ -67,10 +74,50 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, pid
         data_test = readFastaMul(file_name_fasta)
         Brier_count_global, count_global = br.brierMatrix(predictor_name, unit_Brier, data_test, accession_num, dir_pid_name, 
                                                                  Brier_count_global, count_global, pid_inf)
-    Brier_Score_global = Brier_count_global/count_global
+    if count_global != 0:
+        Brier_Score_global = Brier_count_global/count_global
+    else:
+        Brier_Score_global = None
     t.stop("Brier Score with {}".format(predictor_name))
     return Brier_Score_global
 
+
+
+# overfitting ?
+
+def overfittingTest(path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_BlosumRes):
+
+    print("percentage_train:", percentage_train)
+    # intial data_train/test
+    folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "/PfamTrain"   # ATTENTION changer l'appel, le généraliser plus
+    folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "/PfamTest" 
+    print("folder_fasta_train:", folder_fasta_train)
+    print("folder_fasta_test:", folder_fasta_test)
+
+    # possible combination of data_train/test
+    if train_test_reverse == False:
+        folder_train = folder_fasta_train
+        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_A_" +  "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+        if test_is_train == True:
+            folder_test = folder_train        
+        else:
+            folder_test = folder_fasta_test
+    else:
+        folder_train = folder_fasta_test
+        path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_B_" + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
+
+        if test_is_train == True:
+            folder_test = folder_train
+        else:
+            folder_test = folder_fasta_train
+
+    print("folder_train:", folder_train)
+    print("folder_test:", folder_test)
+
+    predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
+    Brier_Score_global = multiBrierMatrix(predictor_name, folder_test, path_pid, unit_Brier_Blosum, pid_inf = 62) 
+    print("Blosum Predictor Brier Score:", Brier_Score_global)
+    print("")
 
 
 
@@ -160,44 +207,9 @@ if __name__ == '__main__':
 
 
 
-# overfitting ?
-
-    def overfittingTest(version, path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_matrix_cond_proba):
-
-        print(percentage_train)
-        # intial data_train/test
-        folder_fasta_train = path_data + "/PfamSplit_" + str(percentage_train) + "_test" + "/PfamTrain"   # ATTENTION changer l'appel, le généraliser plus
-        folder_fasta_test = path_data + "/PfamSplit_" +  str(percentage_train) + "_test" + "/PfamTest" 
-        print("folder_fasta_train:", folder_fasta_train)
-        print("folder_fasta_test:", folder_fasta_test)
-
-        # possible combination of data_train/test
-        if train_test_reverse == False:
-            folder_train = folder_fasta_train
-            path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_A_" + str(version) + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
-            if test_is_train == True:
-                folder_test = folder_train        
-            else:
-                folder_test = folder_fasta_test
-        else:
-            folder_train = folder_fasta_test
-            path_matrix_cond_proba = path_BlosumRes + "/BlosumRes_" + str(percentage_train) + "_B_" + str(version) + "/Blosum_proba_cond.npy"   # à calculer les matrices nécessaires +  adapter les paths
-
-            if test_is_train == True:
-                folder_test = folder_train
-            else:
-                folder_test = folder_fasta_train
-
-        print("folder_train:", folder_train)
-        print("folder_test:", folder_test)
-
-        predictor_name, cond_proba_blosum, unit_Brier_Blosum = br.predictorBlosum(path_matrix_cond_proba)
-        Brier_Score_global = multiBrierMatrix(predictor_name, folder_test, path_pid, unit_Brier_Blosum, pid_inf = 62) 
-        print("Blosum Predictor Brier Score:", Brier_Score_global)
-        print("")
 
 
-if __name__ == '__main__': 
+
     path_data = "/Users/pauline/Desktop/data"
     percentage_train = 0.05
     path_pid = "/Users/pauline/Desktop/data/PID_couple"
@@ -207,7 +219,7 @@ if __name__ == '__main__':
         for train_test_reverse in [True, False]:
             print("test_is_train:", test_is_train)
             print("train_test_reverse:", train_test_reverse)
-            overfittingTest(version, path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_BlosumRes)
+            overfittingTest(path_data, percentage_train, test_is_train, train_test_reverse, path_pid, path_BlosumRes)
 
 
 

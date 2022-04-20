@@ -76,8 +76,8 @@ if __name__ == '__main__':
     # not trimmed version
 
     path_folder_data = "/Users/pauline/Desktop/data/"    # dossier à créer ou l'on veut mettre toutes les data entrées/sorties
-    name_folder_data_train = "PfamTrain"
-    name_folder_data_test = "PfamTest"
+    name_folder_data_train = "Pfam_A"
+    name_folder_data_test = "Pfam_B"
     name_folder_fasta_total = "Pfam_fasta_99"
     path_folder_fasta_total = path_folder_data + name_folder_fasta_total
 
