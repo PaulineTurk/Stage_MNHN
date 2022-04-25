@@ -88,6 +88,7 @@ def dataCountDescription(path_folder_to_describe):
     title = 'Residu percentage in ' + os.path.basename(path_folder_to_describe)
     plt.title(title)
     plt.savefig(path_image + "/" + title)
+    plt.close()
 
     #minCount, maxCount = minMaxCount(count_couple_context)                # pas sure à garder !
     #print("minCount couple aa:", '{:,.2f}'.format(minCount))

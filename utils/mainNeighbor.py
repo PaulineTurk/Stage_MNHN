@@ -28,7 +28,7 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
                         if delay_num < 0:   # before
                             index_range = - delay_num, len_seq
                         elif delay_num > 0: # after
-                            index_range = delay_num, len_seq - 1
+                            index_range = 0, len_seq - delay_num
                         
                         if kp_SeqChoice == "k":
                             seq_c = seq_k
@@ -124,13 +124,16 @@ def sumPlate(dico_triple):
 
 
 
-def simpleContextualBlosum(folder_fasta, path_folder_pid, path_NeighborResX, delay_num, kp_SeqChoice, 
+def simpleContextualBlosum(folder_fasta, percentage_train, path_folder_pid, path_NeighborRes, delay_num, kp_SeqChoice, 
                            pid_inf = 62, scale_factor = 2):
     t = Timer()
     t.start()
-
     path_folder_fasta = Path(folder_fasta + '/')
     files_in_path_folder_fasta = path_folder_fasta.iterdir()
+
+    # Create target Directory if don't exist
+    if not os.path.exists(path_NeighborRes):
+        os.mkdir(path_NeighborRes)
 
     #nbre_file = countFile(path_folder_fasta)
     #countfile = 0
@@ -148,7 +151,7 @@ def simpleContextualBlosum(folder_fasta, path_folder_pid, path_NeighborResX, del
     print("({},{}) - conditional proba".format(delay_num, kp_SeqChoice))
     cond_proba = conditionalProba(list_AA, triplet_count)
     sumPlate(cond_proba)
-    path_proba_cond = path_NeighborResX + "/proba_cond_(" + str(delay_num) + " , " + kp_SeqChoice + ")"
+    path_proba_cond = path_NeighborRes + "/proba_cond_("+ str(delay_num) + "," + kp_SeqChoice + ")" + " _percentage_train_" + str(percentage_train)
     np.save(path_proba_cond, cond_proba) 
     path_proba_cond = path_proba_cond + ".npy"
 
@@ -178,3 +181,26 @@ if __name__ == '__main__':
                 print(df_cond_proba)  
 
  
+    # generalisation au script main
+    # donner le path pid (deja utilisé)
+    # path du train à 50% de Pfam traité (deja utilisé)
+
+    # path ou creer chaque cube 
+    #    
+    list_delay_number = [-1, 1, -2, 2]
+    name_NeighborRes = "NeighborRes"
+    path_folder_pid = "/Users/pauline/Desktop/data/PID_couple"
+    train_percentage = 90
+
+    path_NeighborRes = path_new_folder + name_NeighborRes
+
+
+    for delay_num in list_delay_number:
+        for kp_SeqChoice in ["k", "p"]:
+            print("{}, {}".format(delay_num, kp_SeqChoice))
+            path_proba_cond = simpleContextualBlosum(folder_fasta, train_percentage, path_folder_pid, path_NeighborRes, delay_num, kp_SeqChoice, pid_inf = 62, scale_factor = 2)
+  
+            # visual check
+            cond_proba = np.load(path_proba_cond, allow_pickle='TRUE').item()
+            df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))
+            print(df_cond_proba)  
