@@ -47,6 +47,16 @@ def predictorPerfect(liste_seq, num_accession, nom_dir_pid, Brier_count_global, 
     return Brier_count_global, count_global
 
 
+
+
+
+
+
+
+
+
+
+
 def predictorBlosumNeighbor(path_matrix_cond_proba):
     predictor_name = "Blosum Predictor Neighbor"
     cond_proba_simple_contextual_Blosum = np.load(path_matrix_cond_proba ,allow_pickle='TRUE').item()

@@ -14,6 +14,7 @@ import mainBlosumBrier
 import lowerToUpper
 import dataCountDescription
 import mainNeighbor
+import ContextuelBrier
 
 
 # true/false à choisir: data_treatment, new_folder (each new datasplit), data_split
@@ -30,7 +31,7 @@ path_file_from_Pfam = path_main_folder + "/" + name_file_from_Pfam
 
 
 #####################  User choices
-# data treatment  (to do once !)
+# data treatment  (do it once !)
 data_treatment = False
 name_folder_stockholm = "Pfam_Stockholm"
 name_folder_fasta = "Pfam_fasta"
@@ -55,7 +56,7 @@ blosumGenerator = False
 name_BlosumRes = "BlosumRes"
 
 # simple context blosum generator (i.e cubes of conditional probabilities)
-cube_generator = True
+cube_generator = False
 
 
 ##################### Brier Score (over-fitting part)
@@ -63,6 +64,14 @@ blosum_overfitting_test = False
 
 
 
+
+##################### Brier Score with simple context (Naive Bayes)
+brier_Score_naive_Bayes = True
+path_folder_fasta_test = "/Users/pauline/Desktop/Overfitting_test/test_1/PfamSplit_50/Pfam_mini_test_context"
+percentage_train = 50
+path_pid_folder = "/Users/pauline/Desktop/Overfitting_test/PID_couple"
+path_NeighborRes = "/Users/pauline/Desktop/Overfitting_test/test_1/NeighborRes"
+list_list_len_window = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]    # [len_window_left_k, len_window_right_k, len_window_left_p, len_window_right_p]
 
 
 
@@ -105,9 +114,6 @@ if data_treatment == True:
 # description Pfam after data treatment
 #if descriptionPfam == True:
 #    dataCountDescription.dataCountDescription(path_folder_fasta_non_redondant)
-
-
-
 
 
 
@@ -176,3 +182,19 @@ if blosum_overfitting_test == True:
                 print("test_is_train:", test_is_train)
                 print("train_test_reverse:", train_test_reverse)
                 mainBlosumBrier.overfittingTest(path_new_folder, percentage_train, test_is_train, train_test_reverse, path_folder_pId, path_BlosumRes)
+
+
+
+
+
+##################### Brier Score with simple context (Naive Bayes)
+if brier_Score_naive_Bayes == True:
+    for list_len_window in list_list_len_window:
+        list_bloc = []
+        for position, len_window in enumerate(list_len_window):
+            if len_window != 0:
+                list_neighborResSelection_name, list_neighborResSelection = ContextuelBrier.neighborResSelection(position, len_window, percentage_train, path_NeighborRes)         
+                list_bloc.append(list_neighborResSelection)
+            else:
+                list_bloc.append([])
+        ContextuelBrier.multriContextBayes(path_folder_fasta_test, path_pid_folder, path_NeighborRes, list_len_window, list_bloc, pid_inf = 62)
