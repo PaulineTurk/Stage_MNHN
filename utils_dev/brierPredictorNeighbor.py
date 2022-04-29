@@ -10,7 +10,7 @@ def predictor01(liste_seq, num_accession, nom_dir_pid, Brier_count_global, count
     list_AA = ch.characterList()
     for name_1, seq_1 in liste_seq:
         for name_2 ,seq_2 in liste_seq:
-            if name_1 != name_2:      # ATTENTION, ATTENTION, ATTENTION, à vérifier qu'on ne les compte pas
+            if name_1 != name_2:     
                 if pid_couple[name_1][name_2] >= pid_inf:
                     for (aa_1, aa_2) in zip(seq_1, seq_2):
                         if aa_1 in list_AA and aa_2 in list_AA:
@@ -34,7 +34,7 @@ def predictorPerfect(liste_seq, num_accession, nom_dir_pid, Brier_count_global, 
     list_AA = ch.characterList()
     for name_1, seq_1 in liste_seq:
         for name_2 ,seq_2 in liste_seq:
-            if name_1 != name_2:      # ATTANTION, ATTENTION, ATTENTION, à vérifier qu'on ne les compte pas
+            if name_1 != name_2:      
                 if pid_couple[name_1][name_2] >= pid_inf:
                     for (aa_1, aa_2) in zip(seq_1, seq_2):
                         if aa_1 in list_AA and aa_2 in list_AA:
