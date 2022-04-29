@@ -3,10 +3,8 @@ import dataSplit
 import os, shutil
 import redundancy
 import Stockholm_Fasta
-import fileNumber
 import PID_save as pid
 import redundancy
-import character as ch
 import numpy as np
 import pandas as pd
 import mainBlosum

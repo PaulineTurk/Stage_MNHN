@@ -1,12 +1,16 @@
 from pathlib import Path
 import pandas as pd
 from timer import Timer
-import character as ch
 from fastaReader import readFastaMul
 import matplotlib.pyplot as plt
 import os
 
 
+def countFile(folder):
+    path, dirs, files = next(os.walk(folder))
+    file_count = len(files)
+    print(file_count)
+    return file_count
 
 def dataCountDescription(path_folder_to_describe):
     t = Timer()

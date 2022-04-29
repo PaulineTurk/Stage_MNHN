@@ -1,4 +1,3 @@
-import character as ch
 import pandas as pd
 from random import choice
 from numpy import transpose 

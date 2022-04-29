@@ -1,4 +1,3 @@
-import character
 import fastaReader
 import numpy as np
 import timer

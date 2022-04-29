@@ -4,7 +4,6 @@ from pathlib import Path
 import PID_save as percentageID 
 from timer import Timer
 from fastaReader import readFastaMul
-import character as ch
 
 
 

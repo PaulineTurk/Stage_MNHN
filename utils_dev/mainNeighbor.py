@@ -1,6 +1,5 @@
 from fileNumber import countFile
 from timer import Timer
-import character as ch
 from fastaReader import readFastaMul
 import numpy as np
 from pathlib import Path

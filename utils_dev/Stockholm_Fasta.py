@@ -17,38 +17,40 @@ def separationStockholm(path_file_name, path_folder_to_save):
     t = Timer()
     t.start()
 
+    input_handle = open(path_file_name)
+
     if os.path.isdir(path_folder_to_save):
         shutil.rmtree(path_folder_to_save) 
     os.mkdir(path_folder_to_save)
 
     # collect the accession number of each alignment
     list_accession_num = []
-
-    with open(path_file_name) as file_name:
-        for l in file_name:
-            if l[0:7] == "#=GF AC":
-                init_accession_num = l.index('PF')
-                accession_num = l[init_accession_num: -1]
-                list_accession_num.append(accession_num)
-
+    for l in input_handle:
+        if l[0:7] == "#=GF AC":
+            init_accession_num = l.index('PF')
+            accession_num = l[init_accession_num: -1]
+            list_accession_num.append(accession_num)
+    input_handle.close()
     nbre_file = len(list_accession_num)
 
-    # generate the monoStockholm files that are named after the accession number's alignment ID
-    file_out_nbre = 1
-    with open(path_file_name) as file_name:
-        path_file_out = f"{path_folder_to_save}/{list_accession_num[file_out_nbre]}.stockholm"
-        with open(path_file_out) as file_out:
-            for l in file_name:
-                while l[0:2] != "//" and file_out_nbre <= nbre_file - 1: # avoid generating an empty file at the end:
-                    file_out.write(l)
-                else:
-                    file_out_nbre += 1
-                    path_file_out = f"{path_folder_to_save}/{list_accession_num[file_out_nbre]}.stockholm"
-        print("i m lost")
-                    
+    # generate the monoStockholm files named after the accession number's alignment
+    input_handle = open(path_file_name)
+    file_out_nbre = 0
+    path_file_out = f"{path_folder_to_save}/{list_accession_num[file_out_nbre]}.stockholm"
+    output_handle = open(path_file_out, "w")
 
-    
+    for l in input_handle:
+        output_handle.write(l)
+        if l[0:2] == "//" and file_out_nbre <= nbre_file - 2: # avoid generating an empty file at the end
+            output_handle.close()
+            file_out_nbre += 1
+            path_file_out = f"{path_folder_to_save}/{list_accession_num[file_out_nbre]}.stockholm"
+            output_handle = open(path_file_out, "w")
+
+    output_handle.close()
+    input_handle.close()
     t.stop("Separation of the multiStockholm file into monoStockholm files")
+
 
 
 

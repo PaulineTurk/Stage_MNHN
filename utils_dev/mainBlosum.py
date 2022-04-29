@@ -9,7 +9,6 @@ import blosum as bl
 from sklearn.metrics import euclidean_distances
 from timer import Timer
 from fastaReader import readFastaMul
-import character as ch
 import seaborn as sb
 import matplotlib.pyplot as plt
 
