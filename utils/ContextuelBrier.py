@@ -20,12 +20,12 @@ def contextCatcher(seq_k, seq_p, len_seq,  position_k, len_window_left_k, len_wi
     #print("int(position_k - len_window_left_k < 0)", int((position_k - len_window_left_k) < 0))
 
 
-    if int((position_k - len_window_left_k) >= 0) * int(position_k + len_window_right_k +1 <= len_seq) * int(position_k - len_window_left_p >= 0) * int(position_k + len_window_right_p +1 <= len_seq):
+    if (position_k - len_window_left_k) >= 0 and (position_k + len_window_right_k +1 <= len_seq) and (position_k - len_window_left_p >= 0) and (position_k + len_window_right_p +1 <= len_seq):   # TODO voir si nécessaire ou assert ...
         # on suppose qu'on ne considère un aa et son voisinage que si tous ces voisinages sont définis (selon la taille des fenetres choisies en avance)
         # Rq. aa_k + context with context depending on the windows (tout le context sera écrit, mais pour le calcul de sa proba, ne tenir compte des résidus inclus)
         #print("position:", position_k)
         if len_window_left_k > 0:
-            window_left_k = seq_k[position_k - len_window_left_k: position_k][::-1] 
+            window_left_k = seq_k[position_k - len_window_left_k: position_k][::-1]   # TODO  peut-etre plus rapide comme ca ...... print(mot[5::-1])
             #[::-1]    # reverse the order so the residus are ordered by increasing distance from the couple of interest
         else:
             window_left_k = []
@@ -76,6 +76,10 @@ def neighborResSelection(position, len_window, percentage_train, path_NeighborRe
             list_neighborResSelection_name.append(path_proba_cond)
             cond_proba = np.load(path_proba_cond , allow_pickle='TRUE').item()
             list_neighborResSelection.append(cond_proba)
+
+
+    # TODO: stoper le score de brier sinon pour ce contexte !!!!!!!!!!!!!!!!!
+
     return list_neighborResSelection_name, list_neighborResSelection
 
 
@@ -104,7 +108,7 @@ def probaVector(seq_k, seq_p, index, list_bloc, list_AA,  list_len_window):
             for index_window, contextual_residu in enumerate(window):
                 if contextual_residu in list_AA:
             
-                    for aa_x in list_AA:   # to compute the vector of proba for the prediction
+                    for aa_x in list_AA:   # to compute the vector of proba for the prediction                      # TODO initialiser à 1 !!!!!!!!!!!!I
                         #print("list_bloc:", list_bloc)
                         bloc = list_bloc[position][index_window]
                         #print("")
@@ -138,7 +142,7 @@ def probaVector(seq_k, seq_p, index, list_bloc, list_AA,  list_len_window):
 
 def predictorContextBayes(data_test, accession_num, path_pid_folder, 
                          Brier_count_global, count_global, count_seed, list_bloc,  list_len_window, pid_inf): 
-    pid_couple = np.load(path_pid_folder + "/" + accession_num+ ".pId.npy", allow_pickle='TRUE').item()
+    pid_couple = np.load(path_pid_folder + "/" + accession_num+ ".pId.npy", allow_pickle='TRUE').item()     # TODO sortir !!!!!!!!!!!!!!!!!!
     list_AA = character.characterList()
     count_seed += 1
     if data_test:

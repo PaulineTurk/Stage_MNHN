@@ -15,9 +15,12 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
     # c: context
     # kp_SeqChoice: choice the reference sequence to look at its neighbor 
     liSeqAliFiltre = readFastaMul(file_fasta)
-    pid_couple = np.load(path_folder_pid + "/" + accession_num+ ".pId.npy", allow_pickle='TRUE').item()
-    list_AA = ch.characterList()
+    pid_couple = np.load(path_folder_pid + "/" + accession_num+ ".pId.npy", allow_pickle='TRUE').item()    # TODO: mettre hors de cette fonction
+    list_AA = ch.characterList()  # TODO: mettre hors de cette fonction
 
+
+
+    # TODO: vérifier si c bien celle qui dure le plus longtemps ?????????   si oui virer les in?     ou passer en C ... regarder ou passe le plus de temps ... limiter les in de bas niveau
 
     if liSeqAliFiltre:
         for name_k, seq_k in liSeqAliFiltre:
@@ -38,7 +41,7 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
                         for aa_index in range(index_range[0], index_range[1]):       
                             aa_k = seq_k[aa_index] 
                             aa_p = seq_p[aa_index] 
-                            if all(x in list_AA for x in [aa_k, aa_p]):
+                            if all(x in list_AA for x in [aa_k, aa_p]):     # essayer cube 21*21*21
                                 index_neighbor = aa_index + delay_num
                                 aa_c = seq_c[index_neighbor] 
                                 if aa_c in list_AA: 
