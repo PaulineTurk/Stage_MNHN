@@ -1,4 +1,3 @@
-from fileNumber import countFile
 from timer import Timer
 from fastaReader import readFastaMul
 import numpy as np
