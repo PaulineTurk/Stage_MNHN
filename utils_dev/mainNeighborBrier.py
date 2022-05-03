@@ -65,7 +65,6 @@ def bierContextBayes(folder_fasta, dir_pid_name, pid_inf = 62):
 
 
 
-
 def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, delay_num, kp_SeqChoice, pid_inf = 62):  
     """
     predicteur_name is taken from the list: 
@@ -88,83 +87,4 @@ def multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier, del
     Brier_Score_global = Brier_count_global/count_global
     t.stop("Brier Score with {}".format(predictor_name))
     return Brier_Score_global
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__': 
-    folder_fasta = "/Users/pauline/Desktop/data/PfamSplit_0.05/PfamTrain"
-    dir_pid_name = "/Users/pauline/Desktop/data/PID_couple"
-
-    ########################## Extreme, non-matrix predictors
-    # 01 predictor
-    #worst_brier_score = multiBrier01(folder_fasta, dir_pid_name, pid_inf = 62)   
-    #print(worst_brier_score)
-    ##### nbre_block = 10    # Score: 2.0    # 88.26048 s
-
-    # Perfect predictor
-    #best_brier_score = multiBrierPerfect(folder_fasta, dir_pid_name, pid_inf = 62)  
-    #print(best_brier_score)
-    ##### nbre_block = 10    # Score: 0.0    # 41.22925 s 
-
-
-
-    ########################## Matrix predictors
-    # Equiprobable Predictor
-    #predictor_name, cond_proba_equiproba, unit_Brier_equiproba = br.predicteurEquiprobable()
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_equiproba, pid_inf = 62) 
-    #print(Brier_Score_global)
-    ##### nbre_block = 10      # Score: 0.9499999995757045    # 7.97453 s
-
-
-    # Identity Predictor
-    #predictor_name, cond_proba_id, unit_Brier_id = br.predictorIdentity()
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_id, pid_inf = 62) 
-    #print(Brier_Score_global)
-    ##### nbre_block = 10      # Score: 1.2142567222866654    # 8.62109 s
-    ##### nbre_block = 100     # Score: 1.1395143108363937    # 17.51399 s
-    ##### nbre_block = 1000    # Score: 1.0800426063136361    # 222.40938 s
-
-
-    # Stationary Predictor
-    #freq_aa_global_path = "matrix/matrice_nogaps_10_seed_freq_AA.npy"
-
-    #freq_aa_global = np.load(freq_aa_global_path, allow_pickle='TRUE').item()
-    #predictor_name, cond_proba_stationary, unit_Brier_stationary = br.predictorStationary(freq_aa_global)
-    #Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_stationary, block_nbre, pid_inf = 62) 
-    #print(Brier_Score_global)
-    ##### nbre_block = 10      # Score: 0.9345482772799836    # 7.72772 s
-    ##### nbre_block = 100     # Score: 0.935110285053936     # 17.34066 s
-    ##### nbre_block = 1000    # Score: 0.9393303237972899    # 203.5844 s
-
-
-
-
-
-
-
-
-
-
-    # Blosum Predictor
-    list_percentage  = [0.05, 0.5]
-    for percentage in list_percentage:
-        for delay_num in [-1, 1]:
-            for kp_SeqChoice in ["k", "p"]:
-                print(percentage)
-                print("{}, {}".format(delay_num, kp_SeqChoice))
-                path_matrix = "/Users/pauline/Desktop/data/NeighborRes/NeighborRes_" + str(percentage) +"/proba_cond_(" +str(delay_num) + " , " + str(kp_SeqChoice)+").npy"
-                cond_proba = np.load(path_matrix, allow_pickle='TRUE').item()
-                #df_cond_proba = np.transpose(pd.DataFrame.from_dict(cond_proba))  # only for visualisation
-                #print(df_cond_proba)                                              # only for visualisation
-
-                predictor_name, cond_proba_blosum, unit_Brier_Blosum = brn.predictorBlosumNeighbor(path_matrix)
-                Brier_Score_global = multiBrierMatrix(predictor_name, folder_fasta, dir_pid_name, unit_Brier_Blosum,
-                                         delay_num, kp_SeqChoice) 
-                print(Brier_Score_global)
 

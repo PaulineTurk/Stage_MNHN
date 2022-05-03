@@ -119,32 +119,7 @@ def savePId(path_folder_fasta, path_folder_pId):
 
     for path_fasta_file in path_fasta_files:
         num_accession = os.path.basename(path_fasta_file).split(".")[0] + '.' + os.path.basename(path_fasta_file).split(".")[1]
-        path_file_pId = path_folder_pId + "/" + num_accession + '.pId'
+        path_file_pId = f"{path_folder_pId}/{num_accession}.pId"
         pIdCouple(path_fasta_file, path_file_pId)
+        
     t.stop("Compute and save the pId files")
-
-
-
-
-if __name__ == '__main__': 
-    #path_folder_fasta = "/Users/pauline/Desktop/data/Pfam_fasta"
-    #path_folder_pId = "/Users/pauline/Desktop/data/PID_couple"
-    #savePId(path_folder_fasta, path_folder_pId)     #    14629.03248 s    
-    # 
-    #pid_check = np.load("/Users/pauline/Desktop/data/Pfam_test_PID/PF00002.27.pId.npy" ,allow_pickle='TRUE').item()  
-    #df_pid_check = np.transpose(pd.DataFrame.from_dict(pid_check))
-    #print(df_pid_check)  
- 
-
-
-
-
-    # MINI TEST
-    #path_folder_fasta = "Pfam_test"
-    #path_folder_pId = "Pfam_test_PID"
-    #savePId(path_folder_fasta, path_folder_pId)        
-    # 
-    #pid_check = np.load("Pfam_test_PID/PF00002.27.pId.npy" ,allow_pickle='TRUE').item()  
-    #df_pid_check = np.transpose(pd.DataFrame.from_dict(pid_check))
-    #print(df_pid_check)
-    pass
