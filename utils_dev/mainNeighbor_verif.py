@@ -125,6 +125,7 @@ def simpleContextualBlosum(path_file_fasta,  delay_num, kp_SeqChoice, list_resid
 
 if __name__ == '__main__': 
     
+    
     path_file_fasta = "/Users/pauline/Desktop/Stage_MNHN/utils_dev/Pfam_verif_cube/PF00002.27.trim"
     #delay_num, kp_SeqChoice = -1,  "k"   # <-- validated
     #delay_num, kp_SeqChoice = -2,  "k"   # <-- validated
