@@ -14,12 +14,6 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
     # kp_SeqChoice: choice the reference sequence to look at its neighbor 
     liSeqAliFiltre = readFastaMul(file_fasta)
     pid_couple = np.load(f"{path_folder_pid}/{accession_num}.pId.npy", allow_pickle='TRUE').item()    
-<<<<<<< HEAD
-=======
-
-
-    # TODO: vérifier si c bien celle qui dure le plus longtemps ?????????   si oui virer les in?     ou passer en C ... regarder ou passe le plus de temps ... limiter les in de bas niveau
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
 
     if liSeqAliFiltre:
         for name_k, seq_k in liSeqAliFiltre:
@@ -40,11 +34,7 @@ def tripletCount(accession_num, path_folder_pid, file_fasta, pid_inf, triplet_co
                         for aa_index in range(index_range[0], index_range[1]):       
                             aa_k = seq_k[aa_index] 
                             aa_p = seq_p[aa_index] 
-<<<<<<< HEAD
                             if all(x in list_residu for x in [aa_k, aa_p]):     
-=======
-                            if all(x in list_residu for x in [aa_k, aa_p]):     # essayer cube 21*21*21
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
                                 index_neighbor = aa_index + delay_num
                                 aa_c = seq_c[index_neighbor] 
                                 if aa_c in list_residu: 
@@ -74,25 +64,14 @@ def initialisation(list_symbol):
 
 
 def conditionalProba(list_residu, triplet_count):
-<<<<<<< HEAD
     # pseudo_count idea removed because we have enough data
     intra_couple_count = {}
-=======
-    # pseudo_count idea removed because we have enough data"""
-    intra_couple_count = {}
-    intra_couple_number = 0
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
     for aa_k in list_residu:
         intra_couple_count[aa_k] = {}
         for aa_c in list_residu: 
             intra_couple_count[aa_k][aa_c] = 0
             for aa_p in list_residu:
                 intra_couple_count[aa_k][aa_c] += triplet_count[aa_k][aa_p][aa_c]
-<<<<<<< HEAD
-=======
-                intra_couple_number += triplet_count[aa_k][aa_p][aa_c]
-    print("number of internal valid triplets:", '{:,.2f}'.format(intra_couple_number))
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
 
     cond_proba = {}
     for aa_k in list_residu:
@@ -154,9 +133,6 @@ def simpleContextualBlosum(path_folder_fasta, percentage_train, path_folder_pid,
     path_proba_cond = f"{path_proba_cond}.npy"
 
     return path_proba_cond
-<<<<<<< HEAD
 
 
 print("script_2")
-=======
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f

@@ -75,20 +75,9 @@ def probaVector(seq_k, seq_p, index, list_bloc, list_residu,  list_len_window):
     len_window_right_k = list_len_window[1]  
     len_window_left_p = list_len_window[2]   
     len_window_right_p = list_len_window[3]
-<<<<<<< HEAD
 
     vector_proba = {}
 
-=======
-    #print("len_window_left_k ", len_window_left_k )   
-    #print("len_window_right_k", len_window_right_k)
-    #print("len_window_left_p", len_window_left_p)
-    #print("len_window_right_p", len_window_right_p)
-
-    vector_proba = {}
-
-
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
     len_seq = len(seq_k)
     if seq_k[index] in list_residu and seq_p[index] in list_residu:
         window_left_k, window_right_k, window_left_p, window_right_p = contextCatcher(seq_k, seq_p, len_seq, index, len_window_left_k, len_window_right_k, len_window_left_p, len_window_right_p)
@@ -117,11 +106,7 @@ def probaVector(seq_k, seq_p, index, list_bloc, list_residu,  list_len_window):
 
 
 def predictorContextBayes(data_test, accession_num, path_pid_folder, Brier_count_global, count_global, count_seed, 
-<<<<<<< HEAD
                           list_bloc, list_len_window, pid_inf, list_residu): 
-=======
-                          list_bloc,  list_len_window, pid_inf, list_residu): 
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
     pid_couple = np.load(f"{path_pid_folder}/{accession_num}.pId.npy", allow_pickle='TRUE').item()  
 
     count_seed += 1
@@ -145,11 +130,7 @@ def predictorContextBayes(data_test, accession_num, path_pid_folder, Brier_count
 
     
 
-<<<<<<< HEAD
 def multriContextBayes(path_folder_fasta, path_pid_folder, path_NeighborRes, list_len_window, list_bloc, list_residu, list_list_len_window, pid_inf = 62):   
-=======
-def multriContextBayes(path_folder_fasta, path_pid_folder, path_NeighborRes, list_len_window, list_bloc, list_residu, pid_inf = 62):   
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
     t = timer.Timer()
     t.start()
  
@@ -176,15 +157,9 @@ def multriContextBayes(path_folder_fasta, path_pid_folder, path_NeighborRes, lis
     plt.scatter(list_count_seed, list_Brier_score, label = list_len_window, alpha = 0.75, s = 5)
     plt.xlabel('Seed Number')
     plt.ylabel('Brier Score')
-<<<<<<< HEAD
     count_global_readable = '{:,.2f}'.format(count_global)
     title = f"Average Brier Score on seeds from {os.path.basename(path_folder_fasta)}"
     plt.title(f"{title} \nover {count_global_readable} valid triplets")
-=======
-
-    title = 'Average Brier Score on seeds from ' + os.path.basename(path_folder_fasta) 
-    plt.title(title)
->>>>>>> d67af618d2a34f0757957ec3e09516ebc212c58f
     path_image = path_NeighborRes
     plt.legend()
     plt.savefig(f"{path_image}/{title}_{list_list_len_window}.png")
