@@ -3,6 +3,12 @@ import shutil
 
 
 def copyFileRenameComplete(path_folder, path_original_py, path_original_sh, list_delay_number):
+    """
+    path_folder: path to save the generated py and sh scripts
+    path_original_py: path of the py script to complete
+    path_original_sh: path of the sh script to complete
+    list_delay_number: list of distant neighbor to generate cubes
+    """
 
     if os.path.isdir(path_folder):
         shutil.rmtree(path_folder) 
