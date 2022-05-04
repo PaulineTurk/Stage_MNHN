@@ -2,6 +2,7 @@
 
 # Job name
 #SBATCH --job-name=cube-4_p
+
 # Number pf nodes
 #SBATCH --nodes=1
 
@@ -16,6 +17,7 @@
 
 # Name of output file
 #SBATCH --output=cube-4_p_10.out
+
 # Calculation times
 #SBATCH --time=1-00:00:00
 
@@ -40,6 +42,7 @@ path_folder_data_split=(/mnt/beegfs/pturk/PfamSplit_50)
 path_new_folder=(/mnt/beegfs/pturk/Cubes_10_Pfam_50_A)
 
 cd /trinity/home/pturk/ScriptCubeGenerator
-python ./cube-4_p.py $path_folder_pID $path_folder_data_split $path_new_folderdate
+python ./cube-4_p.py $path_folder_pID $path_folder_data_split $path_new_folder
+date
 
 echo -e "\nDone\n"
