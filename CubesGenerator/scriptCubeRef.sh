@@ -22,8 +22,8 @@
 #SBATCH --time=1-00:00:00
 
 # Add email
-#SBATCH --mail -type=ALL
-#SBATCH --mail -user=pauline.turk@agroparistech.fr
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=pauline.turk@agroparistech.fr
 
 
 # loading modules

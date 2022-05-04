@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Job name
-#SBATCH --job-name=test_1
-
+#SBATCH --job-name=cube-2_k
 # Number pf nodes
 #SBATCH --nodes=1
 
@@ -16,14 +15,13 @@
 #SBATCH --partition=type_2
 
 # Name of output file
-#SBATCH --output=cubes_10.out
-
+#SBATCH --output=cube-2_k_10.out
 # Calculation times
 #SBATCH --time=1-00:00:00
 
 # Add email
-#SBATCH --mail -type=ALL
-#SBATCH --mail -user=pauline.turk@agroparistech.fr
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=pauline.turk@agroparistech.fr
 
 
 # loading modules
