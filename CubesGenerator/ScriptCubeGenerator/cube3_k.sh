@@ -39,7 +39,7 @@ path_folder_pID=(/mnt/beegfs/pturk/PID_couple)
 path_folder_data_split=(/mnt/beegfs/pturk/PfamSplit_50)
 path_new_folder=(/mnt/beegfs/pturk/Cubes_10_Pfam_50_A)
 
-cd /trinity/home/pturk
+cd /trinity/home/pturk/ScriptCubeGenerator
 python ./cube3_k.py $path_folder_pID $path_folder_data_split $path_new_folderdate
 
 echo -e "\nDone\n"

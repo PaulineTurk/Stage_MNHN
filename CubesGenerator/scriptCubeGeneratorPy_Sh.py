@@ -41,6 +41,7 @@ def copyFileRenameComplete(path_folder, path_original_py, path_original_sh, list
             list_line = file.readlines()
             list_line[3] = f"#SBATCH --job-name=cube{delay_num}_{kp_SeqChoice}"
             list_line[18] = f"#SBATCH --output=cube{delay_num}_{kp_SeqChoice}_10.out"
+            list_line[43] = "cd /trinity/home/pturk/ScriptCubeGenerator\n"
             list_line[44] = f"python ./{name_py_file} $path_folder_pID $path_folder_data_split $path_new_folder"
 
             file = open(path_target, "w")
