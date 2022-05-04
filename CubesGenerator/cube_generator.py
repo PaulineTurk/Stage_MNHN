@@ -10,7 +10,7 @@ def copyFileRenameComplete(path_folder, path_original, list_delay_number):
 
     for delay_num in list_delay_number:
         for kp_SeqChoice in ["k", "p"]:
-            path_target = f"{path_folder}/cube{delay_num}_{kp_SeqChoice}.sh"
+            path_target = f"{path_folder}/cube{delay_num}_{kp_SeqChoice}.py"
             shutil.copy(path_original, path_target)
 
 
@@ -30,7 +30,7 @@ def copyFileRenameComplete(path_folder, path_original, list_delay_number):
 
 if __name__ == '__main__': 
     path_folder = '/Users/pauline/Desktop/Stage_MNHN/CubesGenerator/ScriptCubes'
-    path_original = '/Users/pauline/Desktop/Stage_MNHN/CubesGenerator/cube_original.sh'
+    path_original = '/Users/pauline/Desktop/Stage_MNHN/CubesGenerator/cube_original.py'
     list_delay_number = [k for k in range(-10, 11) if k!=0]
 
     copyFileRenameComplete(path_folder, path_original, list_delay_number)
