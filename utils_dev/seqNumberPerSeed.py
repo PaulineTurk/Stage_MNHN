@@ -2,7 +2,7 @@ from pathlib import Path
 import fastaReader
 from timer import Timer
 
-def nbreSeed(path_folder_fasta):   # étape de pré-traitement à ajouter pour éviter certains calculs inutils à des étapes suivantes
+def nbreSeed(path_folder_fasta):  
     
     t = Timer()
     t.start()
